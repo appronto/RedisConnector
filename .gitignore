@@ -8,4 +8,7 @@
 /*.launch
 /*.lock
 proxies
-/*.mendix-cache/*.svn
+/.mendix-cache/.svn/
+.mendix-cache
+.settings
+.svn

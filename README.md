@@ -13,7 +13,7 @@ Redis has built-in replication, Lua scripting, LRU eviction, transactions and di
 * The **authkey** (optional)
 
 ## Installation
-*Import the module **Redis connector** in your project (from the Mendix AppStore or by downloading and exporting the module from this project)
+* Import the module **Redis connector** in your project (from the Mendix AppStore or by downloading and exporting the module from this project)
 * Add Microflow BeforeShutDownRedisConnector to you Before shutdown setting for cleaning up your Redis pool after shutdown  app.
 
 

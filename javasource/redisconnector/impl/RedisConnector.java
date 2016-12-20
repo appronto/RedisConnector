@@ -1,5 +1,7 @@
 package redisconnector.impl;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,6 +23,7 @@ import com.mendix.systemwideinterfaces.core.IMendixObjectMember;
 import com.mendix.systemwideinterfaces.core.ISession;
 
 import redisconnector.proxies.*;
+import redis.clients.jedis.GeoCoordinate;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -46,6 +49,121 @@ public class RedisConnector
 	public void destroy(){
 		pool.destroy();
 	}
+	
+	//https://redis.io/commands/geohash
+	public String geohash(String Key, String Member) {
+		try {
+			 _logNode.debug("DEL " + Key + " Member:" + Member); 
+			 redis = pool.getResource();
+			 List<String> geohashes = redis.geohash(Key, Member);
+			 if (geohashes.size() == 1)
+			 {
+				 return geohashes.get(0);
+			 }
+			 else
+			 {
+				 return null;
+			 }
+		} 
+		catch (JedisConnectionException e)
+	    {
+	        if (redis != null)
+	        {
+	        	redis.close();
+	        }
+	        throw e;
+	    }
+		finally {
+		  if (redis != null){
+			  redis.close();
+		  }
+		}
+	}
+	
+	//https://redis.io/commands/zrem
+	public long zrem(String Key, String Member) {
+		try {
+			 _logNode.debug("DEL " + Key + " Member:" + Member); 
+			 redis = pool.getResource();
+			 return redis.zrem(Key, Member); 
+		} 
+		catch (JedisConnectionException e)
+	    {
+	        if (redis != null)
+	        {
+	        	redis.close();
+	        }
+	        throw e;
+	    }
+		finally {
+		  if (redis != null){
+			  redis.close();
+		  }
+		}
+	}
+	
+	
+	//http://redis.io/commands/geopos
+	public IMendixObject geopos(IContext context, String Key, String Member)  throws Exception {
+		try {
+			_logNode.debug("GEOPOS " + Key +  " Member: "+ Member); 
+			redis = pool.getResource();
+			
+				 List<GeoCoordinate> result = redis.geopos(Key, Member); 
+
+				 if (result.size() > 0)
+				 {
+					 GeoPosition geoPosition = new GeoPosition(context);
+					 geoPosition.setLatitude(new BigDecimal(result.get(0).getLatitude(), MathContext.DECIMAL64) );
+					 geoPosition.setLongitude(new BigDecimal(result.get(0).getLongitude(), MathContext.DECIMAL64) );      
+					 return geoPosition.getMendixObject();
+				 }
+				 else return null;
+			} 
+			catch (JedisConnectionException e)
+		    {
+		        if (redis != null)
+		        {
+		        	redis.close();
+		        }
+		        throw e;
+		    }
+			finally {
+			  if (redis != null){
+				  redis.close();
+			  }
+			}
+	}
+
+	
+	//http://redis.io/commands/geoadd
+	public long geoadd(String Key, double Latitude, double Longitude, String Member) 
+	{	
+		try
+	    {
+	        redis = pool.getResource();
+	        _logNode.debug("GEOADD " + Key +  " + " + Latitude +  " + " + Longitude +  " + " + Member);
+	       	        
+			return redis.geoadd(Key, Longitude, Latitude, Member); 
+	    }
+	    catch (JedisConnectionException e)
+	    {
+	        if (redis != null)
+	        {
+	        	redis.close();
+	        }
+	        throw e;
+	    }
+	    finally
+	    {
+	        if (redis != null)
+	        {
+	        	 redis.close();
+	        }
+	    }
+		
+	}
+	
 	
 	//http://redis.io/commands/lpush
 	public long lpush(String Key, String Value) {

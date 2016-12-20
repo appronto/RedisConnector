@@ -12,45 +12,25 @@ package redisconnector.actions;
 import com.mendix.systemwideinterfaces.core.IContext;
 import com.mendix.webui.CustomJavaAction;
 import redisconnector.impl.RedisConnector;
-import com.mendix.systemwideinterfaces.core.IMendixObject;
 
-/**
- * HSET key field value
- * 
- * Sets field in the hash stored at key to value. If key does not exist, a new key holding a hash is created. If field already exists in the hash, it is overwritten.
- * 
- * Return value
- * Integer reply, specifically:
- * 1 if field is a new field in the hash and value was set.
- * 0 if field already exists in the hash and the value was updated.
- * 
- * Examples
- * redis> HSET myhash field1 "Hello"
- * (integer) 1
- * redis> HGET myhash field1
- * "Hello"
- * redis> 
- */
-public class HSET extends CustomJavaAction<Long>
+public class GetGeoHash extends CustomJavaAction<String>
 {
 	private String Key;
-	private String Field;
-	private String Value;
+	private String Member;
 
-	public HSET(IContext context, String Key, String Field, String Value)
+	public GetGeoHash(IContext context, String Key, String Member)
 	{
 		super(context);
 		this.Key = Key;
-		this.Field = Field;
-		this.Value = Value;
+		this.Member = Member;
 	}
 
 	@Override
-	public Long executeAction() throws Exception
+	public String executeAction() throws Exception
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		return redisconnector.hset(Key,Field,Value);
+		return redisconnector.geohash(Key, Member);
 		// END USER CODE
 	}
 
@@ -60,7 +40,7 @@ public class HSET extends CustomJavaAction<Long>
 	@Override
 	public String toString()
 	{
-		return "HSET";
+		return "GetGeoHash";
 	}
 
 	// BEGIN EXTRA CODE

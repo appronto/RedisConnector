@@ -32,12 +32,12 @@ import com.mendix.webui.CustomJavaAction;
  * 2) "world"
  * redis> 
  */
-public class RPUSH extends CustomJavaAction<Long>
+public class AddValueAtEnd extends CustomJavaAction<Long>
 {
 	private String Key;
 	private String Value;
 
-	public RPUSH(IContext context, String Key, String Value)
+	public AddValueAtEnd(IContext context, String Key, String Value)
 	{
 		super(context);
 		this.Key = Key;
@@ -59,7 +59,7 @@ public class RPUSH extends CustomJavaAction<Long>
 	@Override
 	public String toString()
 	{
-		return "RPUSH";
+		return "AddValueAtEnd";
 	}
 
 	// BEGIN EXTRA CODE

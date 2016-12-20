@@ -30,11 +30,11 @@ import redisconnector.impl.RedisConnector;
  * (integer) 2
  * redis> 
  */
-public class DEL extends CustomJavaAction<Long>
+public class DeleteKey extends CustomJavaAction<Long>
 {
 	private String Key;
 
-	public DEL(IContext context, String Key)
+	public DeleteKey(IContext context, String Key)
 	{
 		super(context);
 		this.Key = Key;
@@ -55,7 +55,7 @@ public class DEL extends CustomJavaAction<Long>
 	@Override
 	public String toString()
 	{
-		return "DEL";
+		return "DeleteKey";
 	}
 
 	// BEGIN EXTRA CODE

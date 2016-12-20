@@ -11,46 +11,45 @@ package redisconnector.actions;
 
 import com.mendix.systemwideinterfaces.core.IContext;
 import com.mendix.webui.CustomJavaAction;
-import redisconnector.impl.RedisConnector;
 import com.mendix.systemwideinterfaces.core.IMendixObject;
 
 /**
- * HMGET key field [field ...]
+ * HGETALL key
  * 
  * Available since 2.0.0.
- * Time complexity: O(N) where N is the number of fields being requested.
- * Returns the values associated with the specified fields in the hash stored at key.
- * For every field that does not exist in the hash, a nil value is returned. Because a non-existing keys are treated as empty hashes, running HMGET against a non-existing key will return a list of nil values.
+ * Time complexity: O(N) where N is the size of the hash.
+ * Returns all fields and values of the hash stored at key. In the returned value, every field name is followed by its value, so the length of the reply is twice the size of the hash.
  * Return value
- * Array reply: list of values associated with the given fields, in the same order as they are requested.
+ * Array reply: list of fields and their values stored in the hash, or an empty list when key does not exist.
+ * Examples
  * redis> HSET myhash field1 "Hello"
  * (integer) 1
  * redis> HSET myhash field2 "World"
  * (integer) 1
- * redis> HMGET myhash field1 field2 nofield
- * 1) "Hello"
- * 2) "World"
- * 3) (nil)
+ * redis> HGETALL myhash
+ * 1) "field1"
+ * 2) "Hello"
+ * 3) "field2"
+ * 4) "World"
  * redis> 
  */
-public class HMGET extends CustomJavaAction<IMendixObject>
+public class GetAllHashMaps extends CustomJavaAction<java.util.List<IMendixObject>>
 {
 	private String Key;
-	private IMendixObject ObjectToReturn;
+	private java.util.List<IMendixObject> ListOfObjectsToReturn;
 
-	public HMGET(IContext context, String Key, IMendixObject ObjectToReturn)
+	public GetAllHashMaps(IContext context, String Key, java.util.List<IMendixObject> ListOfObjectsToReturn)
 	{
 		super(context);
 		this.Key = Key;
-		this.ObjectToReturn = ObjectToReturn;
+		this.ListOfObjectsToReturn = ListOfObjectsToReturn;
 	}
 
 	@Override
-	public IMendixObject executeAction() throws Exception
+	public java.util.List<IMendixObject> executeAction() throws Exception
 	{
 		// BEGIN USER CODE
-		RedisConnector redisconnector = new RedisConnector(); 
-		return redisconnector.hmget(getContext(), Key, ObjectToReturn);
+		throw new com.mendix.systemwideinterfaces.MendixRuntimeException("Java action was not implemented");
 		// END USER CODE
 	}
 
@@ -60,7 +59,7 @@ public class HMGET extends CustomJavaAction<IMendixObject>
 	@Override
 	public String toString()
 	{
-		return "HMGET";
+		return "GetAllHashMaps";
 	}
 
 	// BEGIN EXTRA CODE

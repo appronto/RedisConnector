@@ -24,7 +24,8 @@ Redis has built-in replication, Lua scripting, LRU eviction, transactions and di
 	* check the unit tests for example implementations
 Once you have imported the RedisConnector module in your mendix application, you will have *Redis connector* available in the Toolbox. 
 
-It supports now 8 actions *LPUSH*, *RPUSH*, *LRANGE*, *DEL*, *HSET*, *HMGETALL*, *HMGET*, *HMSET*  and more to come!
+It supports now 15 commands *AddGeoPosition*, *AddMultipleGeoPositions*, *AddValueAtBegin*, *AddValueAtEnd*, *AddValueToSortedList*, *DeleteFromSortedList*, *DeleteKey*, *GetAllHashMaps*, *GetGeoHash*, *GetGeoPosition*, *GetGeoPositions*, *GetHashMap*, *GetValues*, *RedisDestroy*, *SetHashMap*, *SetMultipleHasmaps*  and more to come!
+
 In order to use any of these in your Mendix application, you can just drag and drop them to your microflow.
 Next step would be to provide all the arguments to the selected action and choose the output result name. 
 
@@ -50,3 +51,4 @@ Licensed under the Apache license.
 
 # Version history
 0.1 first commands for Redis implemented
+0.2 added a few commands for geo and some more, see https://redis.io/commands/geoadd 

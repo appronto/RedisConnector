@@ -13,41 +13,27 @@ import com.mendix.systemwideinterfaces.core.IContext;
 import com.mendix.webui.CustomJavaAction;
 import com.mendix.systemwideinterfaces.core.IMendixObject;
 
-/**
- * HGETALL key
- * 
- * Available since 2.0.0.
- * Time complexity: O(N) where N is the size of the hash.
- * Returns all fields and values of the hash stored at key. In the returned value, every field name is followed by its value, so the length of the reply is twice the size of the hash.
- * Return value
- * Array reply: list of fields and their values stored in the hash, or an empty list when key does not exist.
- * Examples
- * redis> HSET myhash field1 "Hello"
- * (integer) 1
- * redis> HSET myhash field2 "World"
- * (integer) 1
- * redis> HGETALL myhash
- * 1) "field1"
- * 2) "Hello"
- * 3) "field2"
- * 4) "World"
- * redis> 
- */
-public class HMGETALL extends CustomJavaAction<java.util.List<IMendixObject>>
+public class GetGeoPositions extends CustomJavaAction<java.util.List<IMendixObject>>
 {
 	private String Key;
-	private java.util.List<IMendixObject> ListOfObjectsToReturn;
+	private java.util.List<IMendixObject> __Names;
+	private java.util.List<redisconnector.proxies.GeoPosition> Names;
 
-	public HMGETALL(IContext context, String Key, java.util.List<IMendixObject> ListOfObjectsToReturn)
+	public GetGeoPositions(IContext context, String Key, java.util.List<IMendixObject> Names)
 	{
 		super(context);
 		this.Key = Key;
-		this.ListOfObjectsToReturn = ListOfObjectsToReturn;
+		this.__Names = Names;
 	}
 
 	@Override
 	public java.util.List<IMendixObject> executeAction() throws Exception
 	{
+		this.Names = new java.util.ArrayList<redisconnector.proxies.GeoPosition>();
+		if (__Names != null)
+			for (IMendixObject __NamesElement : __Names)
+				this.Names.add(redisconnector.proxies.GeoPosition.initialize(getContext(), __NamesElement));
+
 		// BEGIN USER CODE
 		throw new com.mendix.systemwideinterfaces.MendixRuntimeException("Java action was not implemented");
 		// END USER CODE
@@ -59,7 +45,7 @@ public class HMGETALL extends CustomJavaAction<java.util.List<IMendixObject>>
 	@Override
 	public String toString()
 	{
-		return "HMGETALL";
+		return "GetGeoPositions";
 	}
 
 	// BEGIN EXTRA CODE

@@ -33,12 +33,12 @@ import com.mendix.webui.CustomJavaAction;
  * 2) "world"
  * redis> 
  */
-public class LPUSH extends CustomJavaAction<Long>
+public class AddValueAtBegin extends CustomJavaAction<Long>
 {
 	private String Key;
 	private String Value;
 
-	public LPUSH(IContext context, String Key, String Value)
+	public AddValueAtBegin(IContext context, String Key, String Value)
 	{
 		super(context);
 		this.Key = Key;
@@ -60,7 +60,7 @@ public class LPUSH extends CustomJavaAction<Long>
 	@Override
 	public String toString()
 	{
-		return "LPUSH";
+		return "AddValueAtBegin";
 	}
 
 	// BEGIN EXTRA CODE

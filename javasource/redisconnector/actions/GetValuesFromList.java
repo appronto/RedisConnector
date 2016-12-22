@@ -50,13 +50,13 @@ import com.mendix.systemwideinterfaces.core.IMendixObject;
  * (empty list or set)
  * redis> 
  */
-public class GetValues extends CustomJavaAction<java.util.List<IMendixObject>>
+public class GetValuesFromList extends CustomJavaAction<java.util.List<IMendixObject>>
 {
 	private String Key;
 	private Long Start;
 	private Long Stop;
 
-	public GetValues(IContext context, String Key, Long Start, Long Stop)
+	public GetValuesFromList(IContext context, String Key, Long Start, Long Stop)
 	{
 		super(context);
 		this.Key = Key;
@@ -79,7 +79,7 @@ public class GetValues extends CustomJavaAction<java.util.List<IMendixObject>>
 	@Override
 	public String toString()
 	{
-		return "GetValues";
+		return "GetValuesFromList";
 	}
 
 	// BEGIN EXTRA CODE

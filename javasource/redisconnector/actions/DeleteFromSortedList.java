@@ -13,6 +13,9 @@ import com.mendix.systemwideinterfaces.core.IContext;
 import com.mendix.webui.CustomJavaAction;
 import redisconnector.impl.RedisConnector;
 
+/**
+ * https://redis.io/commands/zrem
+ */
 public class DeleteFromSortedList extends CustomJavaAction<Long>
 {
 	private String Key;

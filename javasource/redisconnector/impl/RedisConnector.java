@@ -12,6 +12,7 @@ import java.util.List;
 
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 import com.mendix.core.Core;
@@ -28,6 +29,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Protocol;
+import redis.clients.jedis.Tuple;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
 public class RedisConnector 
@@ -50,6 +52,136 @@ public class RedisConnector
 		pool.destroy();
 	}
 	
+	//https://redis.io/commands/zrange
+	public java.util.List<IMendixObject> zrange(IContext context,String Key, long Start, long Stop) {
+		try {
+			redis = pool.getResource();
+			_logNode.debug("zrange " + Key +  "," + Start +"," + Stop); 
+			Set<String> results;
+			results = redis.zrange(Key, Start, Stop); 
+
+			ArrayList<IMendixObject> resultList = new ArrayList<IMendixObject>();
+		      
+			int count = 1;
+			for(Object object : results) 
+			{
+				 ResultRow row = new ResultRow(context);
+				 row.setKey(String.valueOf(count));
+				 row.setValue((String) object);
+				 resultList.add(row.getMendixObject());
+				 count++;
+			 }
+			 
+			 return resultList;
+		} 
+		catch (JedisConnectionException e)
+	    {
+	        if (redis != null)
+	        {
+	        	redis.close();
+	        }
+	        throw e;
+	    }
+		finally {
+		  if (redis != null){
+			  redis.close();
+		  }
+		}
+	}
+	
+	//https://redis.io/commands/zrange
+	public java.util.List<IMendixObject> zrangeWithScore(IContext context,String Key, long Start, long Stop) {
+		try {
+			redis = pool.getResource();
+			 _logNode.debug("zrange " + Key +  "," + Start +"," + Stop); 
+			 Set<Tuple> results;
+			 results = redis.zrangeWithScores(Key, Start, Stop); 
+			 
+			 ArrayList<IMendixObject> resultList = new ArrayList<IMendixObject>();
+		      
+			 int count = 1;
+			 for(Tuple object : results) 
+			 {
+				 ResultRow row = new ResultRow(context);
+				 row.setKey( String.valueOf(count) );
+				 row.setValue( object.getElement() ); 
+				 row.setScore( new BigDecimal(object.getScore(), MathContext.DECIMAL64) );
+				 resultList.add( row.getMendixObject() );
+				 count++;
+			 }
+			 
+			 return resultList;
+		} 
+		catch (JedisConnectionException e)
+	    {
+	        if (redis != null)
+	        {
+	        	redis.close();
+	        }
+	        throw e;
+	    }
+		finally {
+		  if (redis != null){
+			  redis.close();
+		  }
+		}
+	}
+	
+	//http://redis.io/commands/zadd
+	public long zadd(String Key, double Score, String Member) 
+	{
+		try
+	    {
+	        redis = pool.getResource();
+	        _logNode.debug("zadd " + Key +  " + member " + Member+  " + score " + Score); 
+			 return redis.zadd(Key,Score,Member); 
+	    }
+	    catch (JedisConnectionException e)
+	    {
+	        if (redis != null)
+	        {
+	        	redis.close();
+	        }
+	        throw e;
+	    }
+	    finally
+	    {
+	        if (redis != null)
+	        {
+	        	 redis.close();
+	        }
+	    }
+		
+	}
+	
+	//https://redis.io/commands/llen
+	public long llen(String Key) 
+	{
+		try
+	    {
+	        redis = pool.getResource();
+	        _logNode.debug("LLEN " + Key); 
+			 return redis.llen(Key); 
+	    }
+	    catch (JedisConnectionException e)
+	    {
+	        if (redis != null)
+	        {
+	        	redis.close();
+	        }
+	        throw e;
+	    }
+	    finally
+	    {
+	        if (redis != null)
+	        {
+	        	 redis.close();
+	        }
+	    }
+		
+	}
+
+	
 	//https://redis.io/commands/geohash
 	public String geohash(String Key, String Member) {
 		try {
@@ -64,6 +196,28 @@ public class RedisConnector
 			 {
 				 return null;
 			 }
+		} 
+		catch (JedisConnectionException e)
+	    {
+	        if (redis != null)
+	        {
+	        	redis.close();
+	        }
+	        throw e;
+	    }
+		finally {
+		  if (redis != null){
+			  redis.close();
+		  }
+		}
+	}
+	
+	//https://redis.io/commands/zcard
+	public long zcard(String Key) {
+		try {
+			 _logNode.debug("zcard " + Key ); 
+			 redis = pool.getResource();
+			 return redis.zcard(Key); 
 		} 
 		catch (JedisConnectionException e)
 	    {
@@ -166,8 +320,8 @@ public class RedisConnector
 	
 	
 	//http://redis.io/commands/lpush
-	public long lpush(String Key, String Value) {
-		
+	public long lpush(String Key, String Value) 
+	{
 		try
 	    {
 	        redis = pool.getResource();
@@ -281,7 +435,7 @@ public class RedisConnector
 					Map<String, ? extends IMendixObjectMember<?>> members = object.getMembers(context);
 					for(String key : members.keySet()) { 
 						IMendixObjectMember<?> m = members.get(key);
-						if (m.isVirtual() || m instanceof MendixAutoNumber)
+						if (m.isVirtual() || m instanceof MendixAutoNumber || object.getValue(context, key) == null)
 							continue;
 						if (m instanceof MendixDateTime){
 							hashMap.put(key, processDate(context, object.getValue(context, key),((MendixDateTime) m).shouldLocalize()));

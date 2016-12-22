@@ -31,12 +31,12 @@ import com.mendix.systemwideinterfaces.core.IMendixObject;
  * "World"
  * redis> 
  */
-public class SetMultipleHasmaps extends CustomJavaAction<String>
+public class SetMultipleHashmaps extends CustomJavaAction<String>
 {
 	private String Key;
 	private java.util.List<IMendixObject> ListOfObjects;
 
-	public SetMultipleHasmaps(IContext context, String Key, java.util.List<IMendixObject> ListOfObjects)
+	public SetMultipleHashmaps(IContext context, String Key, java.util.List<IMendixObject> ListOfObjects)
 	{
 		super(context);
 		this.Key = Key;
@@ -58,7 +58,7 @@ public class SetMultipleHasmaps extends CustomJavaAction<String>
 	@Override
 	public String toString()
 	{
-		return "SetMultipleHasmaps";
+		return "SetMultipleHashmaps";
 	}
 
 	// BEGIN EXTRA CODE

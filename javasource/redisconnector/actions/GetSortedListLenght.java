@@ -13,18 +13,14 @@ import com.mendix.systemwideinterfaces.core.IContext;
 import com.mendix.webui.CustomJavaAction;
 import redisconnector.impl.RedisConnector;
 
-public class AddValueToSortedList extends CustomJavaAction<Long>
+public class GetSortedListLenght extends CustomJavaAction<Long>
 {
 	private String Key;
-	private java.math.BigDecimal Score;
-	private String Member;
 
-	public AddValueToSortedList(IContext context, String Key, java.math.BigDecimal Score, String Member)
+	public GetSortedListLenght(IContext context, String Key)
 	{
 		super(context);
 		this.Key = Key;
-		this.Score = Score;
-		this.Member = Member;
 	}
 
 	@Override
@@ -32,9 +28,7 @@ public class AddValueToSortedList extends CustomJavaAction<Long>
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-	    double ScoreConverted = Score.doubleValue();
-        
-		return redisconnector.zadd(Key, ScoreConverted, Member);
+		return redisconnector.zcard(Key);
 		// END USER CODE
 	}
 
@@ -44,7 +38,7 @@ public class AddValueToSortedList extends CustomJavaAction<Long>
 	@Override
 	public String toString()
 	{
-		return "AddValueToSortedList";
+		return "GetSortedListLenght";
 	}
 
 	// BEGIN EXTRA CODE

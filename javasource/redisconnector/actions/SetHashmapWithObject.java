@@ -15,42 +15,40 @@ import redisconnector.impl.RedisConnector;
 import com.mendix.systemwideinterfaces.core.IMendixObject;
 
 /**
- * HSET key field value
+ * HMSET key field value [field value ...]
  * 
- * Sets field in the hash stored at key to value. If key does not exist, a new key holding a hash is created. If field already exists in the hash, it is overwritten.
- * 
+ * Available since 2.0.0.
+ * Time complexity: O(N) where N is the number of fields being set.
+ * Sets the specified fields to their respective values in the hash stored at key. This command overwrites any existing fields in the hash. If key does not exist, a new key holding a hash is created.
  * Return value
- * Integer reply, specifically:
- * 1 if field is a new field in the hash and value was set.
- * 0 if field already exists in the hash and the value was updated.
- * 
+ * Simple string reply
  * Examples
- * redis> HSET myhash field1 "Hello"
- * (integer) 1
+ * redis> HMSET myhash field1 "Hello" field2 "World"
+ * OK
  * redis> HGET myhash field1
  * "Hello"
+ * redis> HGET myhash field2
+ * "World"
  * redis> 
  */
-public class SetHashMap extends CustomJavaAction<Long>
+public class SetHashmapWithObject extends CustomJavaAction<String>
 {
 	private String Key;
-	private String Field;
-	private String Value;
+	private IMendixObject HashMapObject;
 
-	public SetHashMap(IContext context, String Key, String Field, String Value)
+	public SetHashmapWithObject(IContext context, String Key, IMendixObject HashMapObject)
 	{
 		super(context);
 		this.Key = Key;
-		this.Field = Field;
-		this.Value = Value;
+		this.HashMapObject = HashMapObject;
 	}
 
 	@Override
-	public Long executeAction() throws Exception
+	public String executeAction() throws Exception
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		return redisconnector.hset(Key,Field,Value);
+		return redisconnector.hmset(getContext(), Key, HashMapObject);
 		// END USER CODE
 	}
 
@@ -60,7 +58,7 @@ public class SetHashMap extends CustomJavaAction<Long>
 	@Override
 	public String toString()
 	{
-		return "SetHashMap";
+		return "SetHashmapWithObject";
 	}
 
 	// BEGIN EXTRA CODE

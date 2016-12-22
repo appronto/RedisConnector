@@ -13,6 +13,11 @@ import com.mendix.systemwideinterfaces.core.IContext;
 import com.mendix.webui.CustomJavaAction;
 import redisconnector.impl.RedisConnector;
 
+/**
+ * Adds all the specified members with the specified scores to the sorted set stored at key. It is possible to specify multiple score / member pairs. If a specified member is already a member of the sorted set, the score is updated and the element reinserted at the right position to ensure the correct ordering.
+ * If key does not exist, a new sorted set with the specified members as sole members is created, like if the sorted set was empty. If the key exists but does not hold a sorted set, an error is returned.
+ * The score values should be the string representation of a double precision floating point number. +inf and -inf values are valid values as well.
+ */
 public class AddValueToSortedList extends CustomJavaAction<Long>
 {
 	private String Key;

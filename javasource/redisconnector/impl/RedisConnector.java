@@ -53,13 +53,19 @@ public class RedisConnector
 	}
 	
 	//https://redis.io/commands/zrange
-	public java.util.List<IMendixObject> zrange(IContext context,String Key, long Start, long Stop) {
+	public java.util.List<IMendixObject> zrange(IContext context,String Key, long Start, long Stop, redisconnector.proxies.Enum_Sort Sort) {
 		try {
 			redis = pool.getResource();
 			_logNode.debug("zrange " + Key +  "," + Start +"," + Stop); 
 			Set<String> results;
-			results = redis.zrange(Key, Start, Stop); 
-
+			if (Sort != null && Sort == Enum_Sort.Ascending)
+			{
+				results = redis.zrevrange(Key, Start, Stop);
+			}
+			else
+			{
+				results = redis.zrange(Key, Start, Stop); 
+			}
 			ArrayList<IMendixObject> resultList = new ArrayList<IMendixObject>();
 		      
 			int count = 1;
@@ -90,12 +96,19 @@ public class RedisConnector
 	}
 	
 	//https://redis.io/commands/zrange
-	public java.util.List<IMendixObject> zrangeWithScore(IContext context,String Key, long Start, long Stop) {
+	public java.util.List<IMendixObject> zrangeWithScore(IContext context,String Key, long Start, long Stop, redisconnector.proxies.Enum_Sort Sort) {
 		try {
 			redis = pool.getResource();
 			 _logNode.debug("zrange " + Key +  "," + Start +"," + Stop); 
 			 Set<Tuple> results;
-			 results = redis.zrangeWithScores(Key, Start, Stop); 
+			 if (Sort != null && Sort == Enum_Sort.Ascending)
+			 {
+				 results = redis.zrangeWithScores(Key, Start, Stop);
+			 }
+			 else
+			 {
+				 results = redis.zrevrangeWithScores(Key, Start, Stop);
+			 }
 			 
 			 ArrayList<IMendixObject> resultList = new ArrayList<IMendixObject>();
 		      
@@ -424,56 +437,53 @@ public class RedisConnector
 		}
 		
 		//see http://redis.io/commands/hmset
-		public String hmset(IContext context, String Key, java.util.List<IMendixObject> ListOfObjects) {
-			try {
-				_logNode.debug("HMSET " + Key +  " + hashes: "  + ListOfObjects.size()); 
+		public String hmset(IContext context, String Key, IMendixObject HashMapObject) 
+		{
+			try 
+			{
+				_logNode.debug("HMSET " + Key); 
 				redis = pool.getResource();
-				Map<String, String> hashMap = new HashMap<String, String>();
-						    
-				for (IMendixObject object : ListOfObjects){
-					
-					Map<String, ? extends IMendixObjectMember<?>> members = object.getMembers(context);
-					for(String key : members.keySet()) { 
-						IMendixObjectMember<?> m = members.get(key);
-						if (m.isVirtual() || m instanceof MendixAutoNumber || object.getValue(context, key) == null)
-							continue;
-						if (m instanceof MendixDateTime){
-							hashMap.put(key, processDate(context, object.getValue(context, key),((MendixDateTime) m).shouldLocalize()));
-							continue;
-						}
-						if (m instanceof MendixInteger){
-							hashMap.put(key, Integer.toString((object.getValue(context, key))));
-							continue;
-						}
-						if (m instanceof MendixDecimal){
-							hashMap.put(key, Double.toString((object.getValue(context, key))));
-							continue;
-						}
-						if (m instanceof MendixEnum){
-							hashMap.put(key, object.getValue(context, key).toString());
-							continue;
-						}
-						if (m instanceof MendixBoolean){
-							hashMap.put(key, Boolean.toString((object.getValue(context, key))));
-							continue;
-						}
-						if (m instanceof MendixLong){
-							hashMap.put(key, Long.toString((object.getValue(context, key))));
-							continue;
-						}
-						if (((!(m instanceof MendixObjectReference) && !(m instanceof MendixObjectReferenceSet)))){
-						 	hashMap.put(key, object.getValue(context, key).toString());	
-						}
+				Map<String, String> hashMap = new HashMap<String, String>();			    
+				Map<String, ? extends IMendixObjectMember<?>> members = HashMapObject.getMembers(context);
+				
+				for( String key : members.keySet() ) 
+				{ 
+					IMendixObjectMember<?> m = members.get(key);
+					if (m.isVirtual() || m instanceof MendixAutoNumber || HashMapObject.getValue(context, key) == null)
+						continue;
+					if (m instanceof MendixDateTime){
+						hashMap.put(key, processDate(context, (Date) HashMapObject.getValue(context, key),((MendixDateTime) m).shouldLocalize()));
+						continue;
 					}
-					 
+					if (m instanceof MendixInteger){
+						hashMap.put(key, Integer.toString((int) (HashMapObject.getValue(context, key))));
+						continue;
+					}
+					if (m instanceof MendixDecimal){
+						hashMap.put(key, ((BigDecimal) (HashMapObject.getValue(context, key))).toString());
+						continue;
+					}
+					if (m instanceof MendixEnum){
+						hashMap.put(key, HashMapObject.getValue(context, key).toString());
+						continue;
+					}
+					if (m instanceof MendixBoolean){
+						hashMap.put(key, Boolean.toString((boolean) (HashMapObject.getValue(context, key))));
+						continue;
+					}
+					if (m instanceof MendixLong){
+						hashMap.put(key, Long.toString((long) (HashMapObject.getValue(context, key))));
+						continue;
+					}
+					if (((!(m instanceof MendixObjectReference) && !(m instanceof MendixObjectReferenceSet)))){
+					 	hashMap.put(key, HashMapObject.getValue(context, key).toString());	
+					}
 				}
-				 			 
-				 return redis.hmset(Key,hashMap); 
-			} 
+			 	return redis.hmset(Key,hashMap); 
+			}
 			catch (JedisConnectionException e)
 		    {
-		        if (redis != null)
-		        {
+		        if (redis != null){
 		        	redis.close();
 		        }
 		        throw e;
@@ -530,7 +540,7 @@ public class RedisConnector
 				 for (String result : resultList)
 				 {
 						IMendixObjectMember<?> m = members.get(fields[i]);
-						if (m.isVirtual() || m instanceof MendixAutoNumber){
+						if (m.isVirtual() || m instanceof MendixAutoNumber ||result == null){
 							i++; continue;
 						}
 						if (m instanceof MendixDateTime){
@@ -544,7 +554,7 @@ public class RedisConnector
 							continue;
 						}
 						if (m instanceof MendixDecimal){
-							ObjectToReturn.setValue(context, fields[i], Double.valueOf(result));
+							ObjectToReturn.setValue(context, fields[i], new BigDecimal(result , MathContext.DECIMAL64) );
 							i++;
 							continue;
 						}

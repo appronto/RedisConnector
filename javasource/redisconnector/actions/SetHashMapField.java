@@ -15,40 +15,42 @@ import redisconnector.impl.RedisConnector;
 import com.mendix.systemwideinterfaces.core.IMendixObject;
 
 /**
- * HMSET key field value [field value ...]
+ * HSET key field value
  * 
- * Available since 2.0.0.
- * Time complexity: O(N) where N is the number of fields being set.
- * Sets the specified fields to their respective values in the hash stored at key. This command overwrites any existing fields in the hash. If key does not exist, a new key holding a hash is created.
+ * Sets field in the hash stored at key to value. If key does not exist, a new key holding a hash is created. If field already exists in the hash, it is overwritten.
+ * 
  * Return value
- * Simple string reply
+ * Integer reply, specifically:
+ * 1 if field is a new field in the hash and value was set.
+ * 0 if field already exists in the hash and the value was updated.
+ * 
  * Examples
- * redis> HMSET myhash field1 "Hello" field2 "World"
- * OK
+ * redis> HSET myhash field1 "Hello"
+ * (integer) 1
  * redis> HGET myhash field1
  * "Hello"
- * redis> HGET myhash field2
- * "World"
  * redis> 
  */
-public class SetMultipleHashmaps extends CustomJavaAction<String>
+public class SetHashMapField extends CustomJavaAction<Long>
 {
 	private String Key;
-	private java.util.List<IMendixObject> ListOfObjects;
+	private String Field;
+	private String Value;
 
-	public SetMultipleHashmaps(IContext context, String Key, java.util.List<IMendixObject> ListOfObjects)
+	public SetHashMapField(IContext context, String Key, String Field, String Value)
 	{
 		super(context);
 		this.Key = Key;
-		this.ListOfObjects = ListOfObjects;
+		this.Field = Field;
+		this.Value = Value;
 	}
 
 	@Override
-	public String executeAction() throws Exception
+	public Long executeAction() throws Exception
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		return redisconnector.hmset(getContext(), Key,ListOfObjects);
+		return redisconnector.hset(Key,Field,Value);
 		// END USER CODE
 	}
 
@@ -58,7 +60,7 @@ public class SetMultipleHashmaps extends CustomJavaAction<String>
 	@Override
 	public String toString()
 	{
-		return "SetMultipleHashmaps";
+		return "SetHashMapField";
 	}
 
 	// BEGIN EXTRA CODE

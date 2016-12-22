@@ -13,6 +13,11 @@ import com.mendix.systemwideinterfaces.core.IContext;
 import com.mendix.webui.CustomJavaAction;
 import redisconnector.impl.RedisConnector;
 
+/**
+ * Returns the sorted set cardinality (number of elements) of the sorted set stored at key.
+ * Return value
+ * Integer reply: the cardinality (number of elements) of the sorted set, or 0 if key does not exist.
+ */
 public class GetSortedListLenght extends CustomJavaAction<Long>
 {
 	private String Key;

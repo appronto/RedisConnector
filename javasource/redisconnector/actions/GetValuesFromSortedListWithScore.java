@@ -15,53 +15,31 @@ import redisconnector.impl.RedisConnector;
 import com.mendix.systemwideinterfaces.core.IMendixObject;
 
 /**
- * LRANGE key start stop
- * 
- * Returns the specified elements of the list stored at key. The offsets start and stop are zero-based indexes, with 0 being the first element of the list (the head of the list), 1 being the next element and so on.
- * These offsets can also be negative numbers indicating offsets starting at the end of the list. For example, -1 is the last element of the list, -2 the penultimate, and so on.
- * Consistency with range functions in various programming languages
- * 
- * Note that if you have a list of numbers from 0 to 100, LRANGE list 0 10 will return 11 elements, that is, the rightmost item is included. This may or may not be consistent with behavior of range-related functions in your programming language of choice (think Ruby's Range.new, Array#slice or Python's range() function).
- * 
- * Out-of-range indexes
- * Out of range indexes will not produce an error. If start is larger than the end of the list, an empty list is returned. If stop is larger than the actual end of the list, Redis will treat it like the last element of the list.
- * 
+ * Available since 1.2.0.
+ * Time complexity: O(log(N)+M) with N being the number of elements in the sorted set and M the number of elements returned.
+ * Returns the specified range of elements in the sorted set stored at key. The elements are considered to be ordered from the lowest to the highest score. Lexicographical order is used for elements with equal score.
+ * See ZREVRANGE when you need the elements ordered from highest to lowest score (and descending lexicographical order for elements with equal score).
+ * Both start and stop are zero-based indexes, where 0 is the first element, 1 is the next element and so on. They can also be negative numbers indicating offsets from the end of the sorted set, with -1 being the last element of the sorted set, -2 the penultimate element and so on.
+ * start and stop are inclusive ranges, so for example ZRANGE myzset 0 1 will return both the first and the second element of the sorted set.
+ * Out of range indexes will not produce an error. If start is larger than the largest index in the sorted set, or start > stop, an empty list is returned. If stop is larger than the end of the sorted set Redis will treat it like it is the last element of the sorted set.
+ * It is possible to pass the WITHSCORES option in order to return the scores of the elements together with the elements. The returned list will contain value1,score1,...,valueN,scoreN instead of value1,...,valueN. Client libraries are free to return a more appropriate data type (suggestion: an array with (value, score) arrays/tuples).
  * Return value
- * Array reply: list of elements in the specified range.
- * 
- * Examples
- * redis> RPUSH mylist "one"
- * (integer) 1
- * redis> RPUSH mylist "two"
- * (integer) 2
- * redis> RPUSH mylist "three"
- * (integer) 3
- * redis> LRANGE mylist 0 0
- * 1) "one"
- * redis> LRANGE mylist -3 2
- * 1) "one"
- * 2) "two"
- * 3) "three"
- * redis> LRANGE mylist -100 100
- * 1) "one"
- * 2) "two"
- * 3) "three"
- * redis> LRANGE mylist 5 10
- * (empty list or set)
- * redis> 
+ * Array reply: list of elements in the specified range (optionally with their scores, in case the WITHSCORES option is given).
  */
 public class GetValuesFromSortedListWithScore extends CustomJavaAction<java.util.List<IMendixObject>>
 {
 	private String Key;
 	private Long Start;
 	private Long Stop;
+	private redisconnector.proxies.Enum_Sort Sort;
 
-	public GetValuesFromSortedListWithScore(IContext context, String Key, Long Start, Long Stop)
+	public GetValuesFromSortedListWithScore(IContext context, String Key, Long Start, Long Stop, String Sort)
 	{
 		super(context);
 		this.Key = Key;
 		this.Start = Start;
 		this.Stop = Stop;
+		this.Sort = Sort == null ? null : redisconnector.proxies.Enum_Sort.valueOf(Sort);
 	}
 
 	@Override
@@ -69,7 +47,7 @@ public class GetValuesFromSortedListWithScore extends CustomJavaAction<java.util
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		return redisconnector.zrangeWithScore(this.getContext(), Key, Start, Stop);
+		return redisconnector.zrangeWithScore(this.getContext(), Key, Start, Stop, Sort);
 		// END USER CODE
 	}
 

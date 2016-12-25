@@ -28,6 +28,7 @@ import redis.clients.jedis.GeoCoordinate;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.JedisPubSub;
 import redis.clients.jedis.Protocol;
 import redis.clients.jedis.Tuple;
 import redis.clients.jedis.exceptions.JedisConnectionException;
@@ -44,13 +45,84 @@ public class RedisConnector
 						: new JedisPool(new JedisPoolConfig(), redisconnector.proxies.constants.Constants.getRedisEndpoint()
 							,Integer.valueOf(redisconnector.proxies.constants.Constants.getRedisPort())
 							, Protocol.DEFAULT_TIMEOUT)) ;
-		
+	
+	private Jedis subscriberRedis = null;
+	private static MendixRedisPubSub pubSub = new MendixRedisPubSub();
+	
 	public RedisConnector() {		
 	}
 	
 	public void destroy(){
 		pool.destroy();
 	}
+
+	//https://redis.io/commands/publish
+	public void publish(String Channel, String Message) {
+		try {
+			redis = pool.getResource();
+			_logNode.debug("publish " + Channel + " message " + Message); 
+			redis.publish(Channel, Message); 
+		} 
+		catch (JedisConnectionException e)
+	    {
+	        if (redis != null)
+	        {
+	        	redis.close();
+	        	_logNode.debug("publish " + Channel + " message " + Message); 
+	        }
+	        throw e;
+	        
+	    }
+		finally {
+		  if (redis != null){
+			  redis.close();
+		  }
+		}
+	}
+
+	//https://redis.io/commands/psubscribe
+	public void subscribe(String Channel) {
+		try {
+			_logNode.debug("psubscribe " + Channel); 
+			
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						subscriberRedis = pool.getResource();
+						subscriberRedis.psubscribe(pubSub, Channel); 
+						subscriberRedis.close();
+					} catch (Exception e) {
+						_logNode.error("psubscribe " + Channel,e); 
+					}
+				}
+			}, "subscriberThread").start();
+		} 
+		catch (JedisConnectionException e)
+	    {
+	        if (subscriberRedis != null)
+	        {
+	        	subscriberRedis.close();
+	        }
+	        throw e;
+	    }
+	}
+	
+	//https://redis.io/commands/punsubscribe
+	public void unsubscribe(String Channel) {
+		try {
+			_logNode.debug("punsubscribe " + Channel); 
+			if (pubSub != null)
+			{
+				pubSub.punsubscribe(Channel);
+			}
+		} 
+		catch (JedisConnectionException e)
+	    {
+	        throw e;
+	    }
+	}
+	
 	
 	//https://redis.io/commands/zrange
 	public java.util.List<IMendixObject> zrange(IContext context,String Key, long Start, long Stop, redisconnector.proxies.Enum_Sort Sort) {

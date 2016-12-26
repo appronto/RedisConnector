@@ -36,10 +36,13 @@ See http://redis.io/commands/
 # Remarks
 * Avoid fetching large amounts of data as it can lead to memory issues because all the ResultRow data is being loaded into memory at once.
 * pretty amazing performance on local machine 
-	`2016-08-16 23:53:59.828	Redis	Start storing 2.000.000 strings in redis`
-	`2016-08-16 23:55:05.144	Redis	End storing strings in redis, start retrieve`
-	`2016-08-16 23:55:06.894	Redis	Retrieved ended for list, Start sum`
-	`2016-08-16 23:55:06.957	Redis	Sum: 1999999000000`
+`2016-08-16 23:53:59.828	Redis	Start storing 2.000.000 strings in redis`
+
+`2016-08-16 23:55:05.144	Redis	End storing strings in redis, start retrieve`
+
+`2016-08-16 23:55:06.894	Redis	Retrieved ended for list, Start sum`
+
+`2016-08-16 23:55:06.957	Redis	Sum: 1999999000000`
 
 
 # License
@@ -50,5 +53,9 @@ Licensed under the Apache license.
 * Use *Deploy for Eclipse* option (F6) and you can then import this module as an Eclipse project to the Eclipse IDE.
 
 # Version history
-0.1 first commands for Redis implemented
-0.2 added a few commands for geo and some more, see https://redis.io/commands/geoadd 
+1.1 first commands for Redis implemented
+
+1.2 added a few commands for geo and some more, see https://redis.io/commands/geoadd 
+
+1.3 added first pubsub functions
+

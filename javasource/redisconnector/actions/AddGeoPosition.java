@@ -45,12 +45,8 @@ public class AddGeoPosition extends CustomJavaAction<Boolean>
 	public Boolean executeAction() throws Exception
 	{
 		// BEGIN USER CODE
-		RedisConnector redisconnector = new RedisConnector();
-
-        double LatitudeConverted = Latitude.doubleValue();
-        double LongitudeConverted = Longitude.doubleValue();
-        
-		redisconnector.geoadd(Key, LatitudeConverted, LongitudeConverted, Name);
+		RedisConnector redisconnector = new RedisConnector();        
+		redisconnector.geoadd(Key, Latitude.doubleValue(), Longitude.doubleValue(), Name);
 		return true;
 		// END USER CODE
 	}

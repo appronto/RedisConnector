@@ -25,6 +25,8 @@ import com.mendix.systemwideinterfaces.core.ISession;
 
 import redisconnector.proxies.*;
 import redis.clients.jedis.GeoCoordinate;
+import redis.clients.jedis.GeoRadiusResponse;
+import redis.clients.jedis.GeoUnit;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -32,6 +34,7 @@ import redis.clients.jedis.JedisPubSub;
 import redis.clients.jedis.Protocol;
 import redis.clients.jedis.Tuple;
 import redis.clients.jedis.exceptions.JedisConnectionException;
+import redis.clients.jedis.params.geo.GeoRadiusParam;
 
 public class RedisConnector 
 { 
@@ -55,6 +58,57 @@ public class RedisConnector
 	public void destroy(){
 		pool.destroy();
 	}
+	
+	private GeoUnit GetGeoUnitByEnum(redisconnector.proxies.Enum_GeoUnit Unit)
+	{
+		switch (Unit) {
+	        case FT: return GeoUnit.FT;
+	        case MI: return GeoUnit.MI;
+	        case KM: return GeoUnit.KM;
+	        default: return GeoUnit.M;
+		}
+	}
+	
+	//https://redis.io/commands/georadius
+		public java.util.List<IMendixObject> georadius(IContext context,String Key, double Latitude, double Longitude, double Radius, redisconnector.proxies.Enum_GeoUnit Unit, int Max) {
+			try {
+				redis = pool.getResource();
+				_logNode.debug("georadius " + Key +  "," + Longitude +"," +  "," + Latitude +"," + Radius +","  + Unit); 
+				List<GeoRadiusResponse> results;
+				GeoRadiusParam param = GeoRadiusParam.geoRadiusParam().sortAscending().withCoord().withDist();
+				
+				if (Max > 0 ){ param.count(Max); } 
+				
+				results = redis.georadius(Key, Longitude, Latitude, Radius, GetGeoUnitByEnum(Unit), param); 
+
+				ArrayList<IMendixObject> resultList = new ArrayList<IMendixObject>();
+			   
+				for( GeoRadiusResponse object : results ) 
+				{
+					GeoPosition row = new GeoPosition(context);
+					row.setName( object.getMemberByString());	
+					row.setLatitude( new BigDecimal( object.getCoordinate().getLatitude() , MathContext.DECIMAL64) );
+					row.setLongitude( new BigDecimal( object.getCoordinate().getLongitude() , MathContext.DECIMAL64) );
+					row.setDistance( new BigDecimal( object.getDistance() , MathContext.DECIMAL64) );
+					resultList.add( row.getMendixObject() );
+				 }
+				 
+				 return resultList;
+			} 
+			catch (JedisConnectionException e)
+		    {
+		        if (redis != null)
+		        {
+		        	redis.close();
+		        }
+		        throw e;
+		    }
+			finally {
+			  if (redis != null){
+				  redis.close();
+			  }
+			}
+		}
 
 	//https://redis.io/commands/publish
 	public void publish(String Channel, String Message) {
@@ -706,21 +760,18 @@ public class RedisConnector
 
 		}
 		 
-		    public static TimeZone getSessionTimeZone(IContext context) {
-				ISession session = context.getSession();
-				if (session != null) {
-					TimeZone timeZone = session.getTimeZone();
-					if (timeZone != null)
-						return timeZone;
-					return getUTCTimeZone();
-				}
+	    public static TimeZone getSessionTimeZone(IContext context) {
+			ISession session = context.getSession();
+			if (session != null) {
+				TimeZone timeZone = session.getTimeZone();
+				if (timeZone != null)
+					return timeZone;
 				return getUTCTimeZone();
 			}
-		    
-			public static TimeZone getUTCTimeZone() {
-				return TimeZone.getTimeZone("UTC");
-			}
-
-
-		
+			return getUTCTimeZone();
+		}
+	    
+		public static TimeZone getUTCTimeZone() {
+			return TimeZone.getTimeZone("UTC");
+		}		
 }

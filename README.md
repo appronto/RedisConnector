@@ -53,13 +53,13 @@ Licensed under the Apache license.
 * Use *Deploy for Eclipse* option (F6) and you can then import this module as an Eclipse project to the Eclipse IDE.
 
 # Version history
-1.1 first commands for Redis implemented
+1.0 first commands for Redis implemented
 
-1.2 added a few commands for geo and some more, see https://redis.io/commands/geoadd 
+1.1 added a few commands for geo and some more, see https://redis.io/commands/geoadd 
 
-1.3 added first pubsub functions, learn more at https://redis.io/topics/pubsub
+1.2 added first pubsub functions, learn more at https://redis.io/topics/pubsub
 
-1.4 added georadius functionality, learn more at https://redis.io/topics/georadius
+1.3 added georadius functionality, learn more at https://redis.io/topics/georadius
 
 
 #Commands implemented

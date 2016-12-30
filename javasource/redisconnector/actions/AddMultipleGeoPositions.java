@@ -13,6 +13,18 @@ import com.mendix.systemwideinterfaces.core.IContext;
 import com.mendix.webui.CustomJavaAction;
 import com.mendix.systemwideinterfaces.core.IMendixObject;
 
+/**
+ * GEOADD key longitude latitude member [longitude latitude member ...]
+ * 
+ * Available since 3.2.0.
+ * Time complexity: O(log(N)) for each item added, where N is the number of elements in the sorted set.
+ * Adds the specified geospatial items (latitude, longitude, name) to the specified key. Data is stored into the key as a sorted set, in a way that makes it possible to later retrieve items using a query by radius with the GEORADIUS or GEORADIUSBYMEMBER commands.
+ * The command takes arguments in the standard format x,y so the longitude must be specified before the latitude. There are limits to the coordinates that can be indexed: areas very near to the poles are not indexable. The exact limits, as specified by EPSG:900913 / EPSG:3785 / OSGEO:41001 are the following:
+ * Valid longitudes are from -180 to 180 degrees.
+ * Valid latitudes are from -85.05112878 to 85.05112878 degrees.
+ * The command will report an error when the user attempts to index coordinates outside the specified ranges.
+ * Note: there is no GEODEL command because you can use ZREM in order to remove elements. The Geo index structure is just a sorted set.
+ */
 public class AddMultipleGeoPositions extends CustomJavaAction<Boolean>
 {
 	private String Key;

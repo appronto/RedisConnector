@@ -11,19 +11,19 @@ package redisconnector.actions;
 
 import com.mendix.systemwideinterfaces.core.IContext;
 import com.mendix.webui.CustomJavaAction;
+
 import redisconnector.impl.RedisConnector;
 
-/**
- * Returns the length of the list stored at key. If key does not exist, it is interpreted as an empty list and 0 is returned. An error is returned when the value stored at key is not a list.
- */
-public class GetListLenght extends CustomJavaAction<Long>
+public class Expire extends CustomJavaAction<Long>
 {
 	private String Key;
+	private Long Seconds;
 
-	public GetListLenght(IContext context, String Key)
+	public Expire(IContext context, String Key, Long Seconds)
 	{
 		super(context);
 		this.Key = Key;
+		this.Seconds = Seconds;
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class GetListLenght extends CustomJavaAction<Long>
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		return redisconnector.llen(Key);
+		return redisconnector.expire(Key, Seconds.intValue());
 		// END USER CODE
 	}
 
@@ -41,7 +41,7 @@ public class GetListLenght extends CustomJavaAction<Long>
 	@Override
 	public String toString()
 	{
-		return "GetListLenght";
+		return "Expire";
 	}
 
 	// BEGIN EXTRA CODE

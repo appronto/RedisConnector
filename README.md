@@ -121,7 +121,7 @@ Licensed under the Apache license.
 - [ ] **EVALSHA** *sha1 numkeys** * key [key ...] arg [arg ...]* Execute a Lua script server side
 - [ ] **EXEC** Execute all commands issued after MULTI
 - [ ] **EXISTS** *key [key ...]* Determine if a key exists
-- [ ] **EXPIRE** *key seconds* Set a key's time to live in seconds
+- [X] **EXPIRE** *key seconds* Set a key's time to live in seconds
 - [ ] **EXPIREAT** *key timestamp* Set the expiration for a key as a UNIX timestamp
 - [ ] **FLUSHALL** Remove all keys from all databases
 - [ ] **FLUSHDB** Remove all keys from the current database

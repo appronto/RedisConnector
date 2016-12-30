@@ -42,11 +42,11 @@ public class RedisConnector
 	private ILogNode _logNode = Core.getLogger("Redis");
 	
 	private static JedisPool pool =  (redisconnector.proxies.constants.Constants.getRedisAuth().trim().length() > 0 
-			? new JedisPool(new JedisPoolConfig(), redisconnector.proxies.constants.Constants.getRedisEndpoint()
-					,Integer.valueOf(redisconnector.proxies.constants.Constants.getRedisPort())
-					, Protocol.DEFAULT_TIMEOUT,redisconnector.proxies.constants.Constants.getRedisAuth()) 
-						: new JedisPool(new JedisPoolConfig(), redisconnector.proxies.constants.Constants.getRedisEndpoint()
-							,Integer.valueOf(redisconnector.proxies.constants.Constants.getRedisPort())
+			? new JedisPool(new JedisPoolConfig(), redisconnector.proxies.constants.Constants.getRedisEndpoint().trim()
+					,Integer.valueOf(redisconnector.proxies.constants.Constants.getRedisPort().trim())
+					, Protocol.DEFAULT_TIMEOUT,redisconnector.proxies.constants.Constants.getRedisAuth().trim()) 
+						: new JedisPool(new JedisPoolConfig(), redisconnector.proxies.constants.Constants.getRedisEndpoint().trim()
+							,Integer.valueOf(redisconnector.proxies.constants.Constants.getRedisPort().trim())
 							, Protocol.DEFAULT_TIMEOUT)) ;
 	
 	private Jedis subscriberRedis = null;
@@ -59,6 +59,29 @@ public class RedisConnector
 		pool.destroy();
 	}
 	
+	//https://redis.io/commands/expire
+	public long expire(String Key, int Seconds){
+		try {
+			redis = pool.getResource();
+			_logNode.debug("expire " + Key + " Seconds " + Seconds); 
+			return redis.expire(Key, Seconds); 
+		} 
+		catch (JedisConnectionException e)
+	    {
+	        if (redis != null)
+	        {
+	        	redis.close();
+	        }
+	        throw e;
+	        
+	    }
+		finally {
+		  if (redis != null){
+			  redis.close();
+		  }
+		}
+	}
+	
 	private GeoUnit GetGeoUnitByEnum(redisconnector.proxies.Enum_GeoUnit Unit)
 	{
 		switch (Unit) {
@@ -68,7 +91,7 @@ public class RedisConnector
 	        default: return GeoUnit.M;
 		}
 	}
-	
+		
 	//https://redis.io/commands/georadius
 		public java.util.List<IMendixObject> georadius(IContext context,String Key, double Latitude, double Longitude, double Radius, redisconnector.proxies.Enum_GeoUnit Unit, int Max) {
 			try {
@@ -110,6 +133,7 @@ public class RedisConnector
 			}
 		}
 
+		
 	//https://redis.io/commands/publish
 	public void publish(String Channel, String Message) {
 		try {
@@ -135,7 +159,7 @@ public class RedisConnector
 	}
 
 	//https://redis.io/commands/psubscribe
-	public void subscribe(String Channel) {
+	public void subscribe(final String Channel) {
 		try {
 			_logNode.debug("psubscribe " + Channel); 
 			

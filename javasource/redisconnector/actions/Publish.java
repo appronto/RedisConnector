@@ -13,6 +13,13 @@ import com.mendix.systemwideinterfaces.core.IContext;
 import com.mendix.webui.CustomJavaAction;
 import redisconnector.impl.RedisConnector;
 
+/**
+ * Channel can be a pattern with wildcards, see https://redis.io/commands/psubscribe
+ * 
+ * Posts a message to the given channel.
+ * Return value
+ * Integer reply: the number of clients that received the message.
+ */
 public class Publish extends CustomJavaAction<Boolean>
 {
 	private String Channel;

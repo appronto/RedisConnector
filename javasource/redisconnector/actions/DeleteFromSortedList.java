@@ -15,6 +15,12 @@ import redisconnector.impl.RedisConnector;
 
 /**
  * https://redis.io/commands/zrem
+ * 
+ * Removes the specified members from the sorted set stored at key. Non existing members are ignored.
+ * An error is returned when key exists and does not hold a sorted set.
+ * Return value
+ * Integer reply, specifically:
+ * The number of members removed from the sorted set, not including non existing members.
  */
 public class DeleteFromSortedList extends CustomJavaAction<Long>
 {

@@ -53,6 +53,13 @@ public class RedisConnector
 	private static MendixRedisPubSub pubSub = new MendixRedisPubSub();
 	
 	public RedisConnector() {		
+		try {
+			Long.valueOf( redisconnector.proxies.constants.Constants.getRedisDatabaseIndex().trim());
+		}
+		catch (NumberFormatException e){
+			_logNode.error("Please configure constant RedisDatabaseIndex with value 0 or higher, current value: "+ redisconnector.proxies.constants.Constants.getRedisDatabaseIndex().trim(), e); 
+			throw new IllegalArgumentException("Please configure constant RedisDatabaseIndex with value 0 or higher, current value: "+ redisconnector.proxies.constants.Constants.getRedisDatabaseIndex().trim());
+		}
 	}
 	
 	public void destroy(){
@@ -63,6 +70,7 @@ public class RedisConnector
 	public long expire(String Key, int Seconds){
 		try {
 			redis = pool.getResource();
+			setDatabase();
 			_logNode.debug("expire " + Key + " Seconds " + Seconds); 
 			return redis.expire(Key, Seconds); 
 		} 
@@ -82,6 +90,11 @@ public class RedisConnector
 		}
 	}
 	
+	private void setDatabase() {
+		if ( redis.getDB() != Long.valueOf( redisconnector.proxies.constants.Constants.getRedisDatabaseIndex().trim() ) )
+			redis.select(Integer.valueOf( redisconnector.proxies.constants.Constants.getRedisDatabaseIndex().trim() ) );
+	}
+	
 	private GeoUnit GetGeoUnitByEnum(redisconnector.proxies.Enum_GeoUnit Unit)
 	{
 		switch (Unit) {
@@ -96,6 +109,7 @@ public class RedisConnector
 		public java.util.List<IMendixObject> georadius(IContext context,String Key, double Latitude, double Longitude, double Radius, redisconnector.proxies.Enum_GeoUnit Unit, int Max) {
 			try {
 				redis = pool.getResource();
+				setDatabase();
 				_logNode.debug("georadius " + Key +  "," + Longitude +"," +  "," + Latitude +"," + Radius +","  + Unit); 
 				List<GeoRadiusResponse> results;
 				GeoRadiusParam param = GeoRadiusParam.geoRadiusParam().sortAscending().withCoord().withDist();
@@ -138,6 +152,7 @@ public class RedisConnector
 	public void publish(String Channel, String Message) {
 		try {
 			redis = pool.getResource();
+			setDatabase();
 			_logNode.debug("publish " + Channel + " message " + Message); 
 			redis.publish(Channel, Message); 
 		} 
@@ -168,6 +183,7 @@ public class RedisConnector
 				public void run() {
 					try {
 						subscriberRedis = pool.getResource();
+						subscriberRedis.select( Integer.valueOf( redisconnector.proxies.constants.Constants.getRedisDatabaseIndex().trim() ) );
 						subscriberRedis.psubscribe(pubSub, Channel); 
 						subscriberRedis.close();
 					} catch (Exception e) {
@@ -206,6 +222,7 @@ public class RedisConnector
 	public java.util.List<IMendixObject> zrange(IContext context,String Key, long Start, long Stop, redisconnector.proxies.Enum_Sort Sort) {
 		try {
 			redis = pool.getResource();
+			setDatabase();
 			_logNode.debug("zrange " + Key +  "," + Start +"," + Stop); 
 			Set<String> results;
 			if (Sort != null && Sort == Enum_Sort.Ascending)
@@ -249,6 +266,7 @@ public class RedisConnector
 	public java.util.List<IMendixObject> zrangeWithScore(IContext context,String Key, long Start, long Stop, redisconnector.proxies.Enum_Sort Sort) {
 		try {
 			redis = pool.getResource();
+			setDatabase();
 			 _logNode.debug("zrange " + Key +  "," + Start +"," + Stop); 
 			 Set<Tuple> results;
 			 if (Sort != null && Sort == Enum_Sort.Ascending)
@@ -296,6 +314,7 @@ public class RedisConnector
 		try
 	    {
 	        redis = pool.getResource();
+	        setDatabase();
 	        _logNode.debug("zadd " + Key +  " + member " + Member+  " + score " + Score); 
 			 return redis.zadd(Key,Score,Member); 
 	    }
@@ -323,6 +342,7 @@ public class RedisConnector
 		try
 	    {
 	        redis = pool.getResource();
+	        setDatabase();
 	        _logNode.debug("LLEN " + Key); 
 			 return redis.llen(Key); 
 	    }
@@ -350,6 +370,7 @@ public class RedisConnector
 		try {
 			 _logNode.debug("DEL " + Key + " Member:" + Member); 
 			 redis = pool.getResource();
+		     setDatabase();
 			 List<String> geohashes = redis.geohash(Key, Member);
 			 if (geohashes.size() == 1)
 			 {
@@ -380,6 +401,7 @@ public class RedisConnector
 		try {
 			 _logNode.debug("zcard " + Key ); 
 			 redis = pool.getResource();
+		     setDatabase();
 			 return redis.zcard(Key); 
 		} 
 		catch (JedisConnectionException e)
@@ -402,6 +424,7 @@ public class RedisConnector
 		try {
 			 _logNode.debug("DEL " + Key + " Member:" + Member); 
 			 redis = pool.getResource();
+		     setDatabase();
 			 return redis.zrem(Key, Member); 
 		} 
 		catch (JedisConnectionException e)
@@ -425,6 +448,7 @@ public class RedisConnector
 		try {
 			_logNode.debug("GEOPOS " + Key +  " Member: "+ Member); 
 			redis = pool.getResource();
+	        setDatabase();
 			
 				 List<GeoCoordinate> result = redis.geopos(Key, Member); 
 
@@ -459,6 +483,7 @@ public class RedisConnector
 		try
 	    {
 	        redis = pool.getResource();
+	        setDatabase();
 	        _logNode.debug("GEOADD " + Key +  " + " + Latitude +  " + " + Longitude +  " + " + Member);
 	       	        
 			return redis.geoadd(Key, Longitude, Latitude, Member); 
@@ -488,6 +513,7 @@ public class RedisConnector
 		try
 	    {
 	        redis = pool.getResource();
+	        setDatabase();
 	        _logNode.debug("LPUSH " + Key +  " + " + Value); 
 			 return redis.lpush(Key,Value); 
 	    }
@@ -514,6 +540,7 @@ public class RedisConnector
 		try {
 			 _logNode.debug("RPUSH " + Key +  " + " + Value); 
 			 redis = pool.getResource();
+		        setDatabase();
 			 return redis.rpush(Key,Value); 
 		} 
 		catch (JedisConnectionException e)
@@ -535,6 +562,7 @@ public class RedisConnector
 		public java.util.List<IMendixObject> lrange(IContext context,String Key, long Start, long Stop) {
 			try {
 				redis = pool.getResource();
+		        setDatabase();
 				 _logNode.debug("LRANGE " + Key +  "," + Start +"," + Stop); 
 				 List<String> results = redis.lrange(Key, Start, Stop); 
 				
@@ -569,6 +597,7 @@ public class RedisConnector
 			try {
 				 _logNode.debug("HSET " + Key +  " + " + Field + " + " + Value); 
 				 redis = pool.getResource();
+			     setDatabase();
 				 return redis.hset(Key,Field,Value); 
 			} 
 			catch (JedisConnectionException e)
@@ -593,6 +622,7 @@ public class RedisConnector
 			{
 				_logNode.debug("HMSET " + Key); 
 				redis = pool.getResource();
+		        setDatabase();
 				Map<String, String> hashMap = new HashMap<String, String>();			    
 				Map<String, ? extends IMendixObjectMember<?>> members = HashMapObject.getMembers(context);
 				
@@ -650,6 +680,7 @@ public class RedisConnector
 			try {
 				 _logNode.debug("DEL " + Key); 
 				 redis = pool.getResource();
+			     setDatabase();
 				 return redis.del(Key); 
 			} 
 			catch (JedisConnectionException e)
@@ -672,6 +703,7 @@ public class RedisConnector
 			try {
 				_logNode.debug("HMGET " + Key +  " + object: "  + ObjectToReturn.toString()); 
 				redis = pool.getResource();
+		        setDatabase();
 				
 				Map<String, ? extends IMendixObjectMember<?>> members;				    
 				members = ObjectToReturn.getMembers(context);

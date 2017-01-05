@@ -336,7 +336,7 @@ public class RedisConnector
 		
 	}
 	
-	//http://redis.io/commands/zadd
+	//http://redis.io/commands/zrank
 	public long zrank(String Key, String Member, redisconnector.proxies.Enum_Sort Sort) 
 	{
 		try {
@@ -455,7 +455,7 @@ public class RedisConnector
 	//https://redis.io/commands/zrem
 	public long zrem(String Key, String Member) {
 		try {
-			 _logNode.debug("DEL " + Key + " Member:" + Member); 
+			 _logNode.debug("zrem " + Key + " Member:" + Member); 
 			 redis = pool.getResource();
 		     setDatabase();
 			 return redis.zrem(Key, Member); 
@@ -608,6 +608,29 @@ public class RedisConnector
 			        	resultList.add(row.getMendixObject());         
 				 }
 				 return resultList;
+			} 
+			catch (JedisConnectionException e)
+		    {
+		        if (redis != null)
+		        {
+		        	redis.close();
+		        }
+		        throw e;
+		    }
+			finally {
+			  if (redis != null){
+				  redis.close();
+			  }
+			}
+		}
+		
+		//https://redis.io/commands/lrem
+		public long lrem(String Key, long Count, String Member) {
+			try {
+				 _logNode.debug("lrem " + Key + " Member:" + Member); 
+				 redis = pool.getResource();
+			     setDatabase();
+				 return redis.lrem(Key, Count, Member); 
 			} 
 			catch (JedisConnectionException e)
 		    {

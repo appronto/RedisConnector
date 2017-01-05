@@ -162,7 +162,7 @@ Licensed under the Apache license.
 - [X] **LPUSH** *key value [value ...]* Prepend one or multiple values to a list
 - [ ] **LPUSHX** *key value* Prepend a value to a list, only if the list exists
 - [X] **LRANGE** *key start stop* Get a range of elements from a list
-- [ ] **LREM** *key count value* Remove elements from a list
+- [X] **LREM** *key count value* Remove elements from a list
 - [ ] **LSET** *key index value* Set the value of an element in a list by its index
 - [ ] **LTRIM** *key start stop* Trim a list to the specified range
 - [ ] **MGET** * key [key ...]* Get the values of all the given keys
@@ -251,7 +251,7 @@ Licensed under the Apache license.
 - [ ] **ZRANGEBYLEX** *key min max [LIMIT offset count]* Return a range of members in a sorted set, by lexicographical range
 - [ ] **ZREVRANGEBYLEX** *key max min [LIMIT offset count]* Return a range of members in a sorted set, by lexicographical range, ordered from higher to lower strings.
 - [ ] **ZRANGEBYSCORE** *key min max [WITHSCORES] [LIMIT offset count]* Return a range of members in a sorted set, by score
-- [ ] **ZRANK** *key member* Determine the index of a member in a sorted set
+- [X] **ZRANK** *key member* Determine the index of a member in a sorted set
 - [X] **ZREM** *key member [member ...]* Remove one or more members from a sorted set
 - [ ] **ZREMRANGEBYLEX** *key min max* Remove all members in a sorted set between the given lexicographical range
 - [ ] **ZREMRANGEBYRANK** *key start stop* Remove all members in a sorted set within the given indexes

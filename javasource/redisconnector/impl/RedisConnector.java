@@ -336,6 +336,39 @@ public class RedisConnector
 		
 	}
 	
+	//http://redis.io/commands/zadd
+	public long zrank(String Key, String Member, redisconnector.proxies.Enum_Sort Sort) 
+	{
+		try {
+			redis = pool.getResource();
+			setDatabase();
+			 _logNode.debug("zrank " + Key +  ", Member " + Member +", Sort:" + Sort); 
+
+			 if (Sort != null && Sort == Enum_Sort.Ascending)
+			 {
+				 return redis.zrank(Key, Member);
+			 }
+			 else
+			 {
+				 return redis.zrevrank(Key, Member);
+			 }
+		} 
+		catch (JedisConnectionException e)
+	    {
+	        if (redis != null)
+	        {
+	        	redis.close();
+	        }
+	        throw e;
+	    }
+		finally {
+		  if (redis != null){
+			  redis.close();
+		  }
+		}
+		
+	}
+	
 	//https://redis.io/commands/llen
 	public long llen(String Key) 
 	{

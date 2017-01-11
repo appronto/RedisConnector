@@ -20,25 +20,24 @@ import redisconnector.impl.RedisConnector;
  * Return value
  * Integer reply: the number of clients that received the message.
  */
-public class Publish extends CustomJavaAction<Boolean>
+public class Publish extends CustomJavaAction<Long>
 {
-	private String Channel;
-	private String MessageParameter1;
+	private String channel;
+	private String message;
 
-	public Publish(IContext context, String Channel, String MessageParameter1)
+	public Publish(IContext context, String channel, String message)
 	{
 		super(context);
-		this.Channel = Channel;
-		this.MessageParameter1 = MessageParameter1;
+		this.channel = channel;
+		this.message = message;
 	}
 
 	@Override
-	public Boolean executeAction() throws Exception
+	public Long executeAction() throws Exception
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		redisconnector.publish(Channel, MessageParameter1);
-		return true;
+		return redisconnector.publish(channel, message);
 		// END USER CODE
 	}
 

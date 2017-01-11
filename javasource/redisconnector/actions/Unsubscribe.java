@@ -21,12 +21,12 @@ import redisconnector.impl.RedisConnector;
  */
 public class Unsubscribe extends CustomJavaAction<Boolean>
 {
-	private String Channel;
+	private String channel;
 
-	public Unsubscribe(IContext context, String Channel)
+	public Unsubscribe(IContext context, String channel)
 	{
 		super(context);
-		this.Channel = Channel;
+		this.channel = channel;
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class Unsubscribe extends CustomJavaAction<Boolean>
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		redisconnector.unsubscribe(Channel);
+		redisconnector.unsubscribe(channel);
 		return true;
 		// END USER CODE
 	}

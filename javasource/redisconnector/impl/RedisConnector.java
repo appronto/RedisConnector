@@ -149,12 +149,12 @@ public class RedisConnector
 
 		
 	//https://redis.io/commands/publish
-	public void publish(String Channel, String Message) {
+	public long publish(String Channel, String Message) {
 		try {
 			redis = pool.getResource();
 			setDatabase();
 			_logNode.debug("publish " + Channel + " message " + Message); 
-			redis.publish(Channel, Message); 
+			return redis.publish(Channel, Message); 
 		} 
 		catch (JedisConnectionException e)
 	    {

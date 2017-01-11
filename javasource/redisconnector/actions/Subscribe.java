@@ -18,12 +18,12 @@ import redisconnector.impl.RedisConnector;
  */
 public class Subscribe extends CustomJavaAction<Boolean>
 {
-	private String Channel;
+	private String channel;
 
-	public Subscribe(IContext context, String Channel)
+	public Subscribe(IContext context, String channel)
 	{
 		super(context);
-		this.Channel = Channel;
+		this.channel = channel;
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class Subscribe extends CustomJavaAction<Boolean>
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		redisconnector.subscribe(Channel);
+		redisconnector.subscribe(channel);
 		return true;
 		// END USER CODE
 	}

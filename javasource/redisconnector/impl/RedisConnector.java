@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import com.mendix.core.Core;
+import com.mendix.core.action.Context;
 import com.mendix.core.objectmanagement.member.*;
 import com.mendix.logging.ILogNode;
 import com.mendix.systemwideinterfaces.core.IContext;
@@ -568,6 +569,42 @@ public class RedisConnector
 		
 	}
 	
+	public long lpush(String key, java.util.List<redisconnector.proxies.InputRow> valueList) 
+	{
+		try
+	    {
+	        redis = pool.getResource();
+	        setDatabase();
+	        _logNode.debug("LPUSH " + key +  " + List: " + valueList.size()); 
+	        
+			String[] fields = new String[ valueList.size() ];
+			int i = 0;
+			for (InputRow value : valueList)
+			{
+				fields[i]= value.getValue();
+				i++;
+			}
+			return redis.lpush(key, fields); 
+	    }
+	    catch (JedisConnectionException e)
+	    {
+	        if (redis != null)
+	        {
+	        	redis.close();
+	        }
+	        throw e;
+	    }
+	    finally
+	    {
+	        if (redis != null)
+	        {
+	        	 redis.close();
+	        }
+	    }
+		
+	}
+	
+	
 	//see http://redis.io/commands/rpush
 	public long rpush(String Key, String Value) {
 		try {
@@ -589,6 +626,42 @@ public class RedisConnector
 			  redis.close();
 		  }
 		}
+	}
+	
+	//see http://redis.io/commands/rpush
+	public long rpush(String key, java.util.List<redisconnector.proxies.InputRow> valueList) 
+	{
+		try
+	    {
+	        redis = pool.getResource();
+	        setDatabase();
+	        _logNode.debug("rpush " + key +  " + List: " + valueList.size()); 
+	        
+			String[] fields = new String[ valueList.size() ];
+			int i = 0;
+			for (InputRow value : valueList)
+			{
+				fields[i]= value.getValue();
+				i++;
+			}
+			return redis.rpush(key, fields); 
+	    }
+	    catch (JedisConnectionException e)
+	    {
+	        if (redis != null)
+	        {
+	        	redis.close();
+	        }
+	        throw e;
+	    }
+	    finally
+	    {
+	        if (redis != null)
+	        {
+	        	 redis.close();
+	        }
+	    }
+		
 	}
 	
 	//see http://redis.io/commands/lrange

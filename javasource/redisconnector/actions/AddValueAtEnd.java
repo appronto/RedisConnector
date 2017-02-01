@@ -34,14 +34,14 @@ import com.mendix.webui.CustomJavaAction;
  */
 public class AddValueAtEnd extends CustomJavaAction<Long>
 {
-	private String Key;
-	private String Value;
+	private String key;
+	private String value;
 
-	public AddValueAtEnd(IContext context, String Key, String Value)
+	public AddValueAtEnd(IContext context, String key, String value)
 	{
 		super(context);
-		this.Key = Key;
-		this.Value = Value;
+		this.key = key;
+		this.value = value;
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class AddValueAtEnd extends CustomJavaAction<Long>
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		return redisconnector.rpush(Key,Value);
+		return redisconnector.rpush(key,value);
 		// END USER CODE
 	}
 

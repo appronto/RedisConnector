@@ -15,14 +15,14 @@ import redisconnector.impl.RedisConnector;
 
 public class Expire extends CustomJavaAction<Long>
 {
-	private String Key;
-	private Long Seconds;
+	private String key;
+	private Long seconds;
 
-	public Expire(IContext context, String Key, Long Seconds)
+	public Expire(IContext context, String key, Long seconds)
 	{
 		super(context);
-		this.Key = Key;
-		this.Seconds = Seconds;
+		this.key = key;
+		this.seconds = seconds;
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class Expire extends CustomJavaAction<Long>
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		return redisconnector.expire(Key, Seconds.intValue());
+		return redisconnector.expire(key, seconds.intValue());
 		// END USER CODE
 	}
 

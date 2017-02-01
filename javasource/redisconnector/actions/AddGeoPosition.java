@@ -27,18 +27,18 @@ import redisconnector.impl.RedisConnector;
  */
 public class AddGeoPosition extends CustomJavaAction<Boolean>
 {
-	private String Key;
-	private java.math.BigDecimal Latitude;
-	private java.math.BigDecimal Longitude;
-	private String Name;
+	private String key;
+	private java.math.BigDecimal latitude;
+	private java.math.BigDecimal longitude;
+	private String name;
 
-	public AddGeoPosition(IContext context, String Key, java.math.BigDecimal Latitude, java.math.BigDecimal Longitude, String Name)
+	public AddGeoPosition(IContext context, String key, java.math.BigDecimal latitude, java.math.BigDecimal longitude, String name)
 	{
 		super(context);
-		this.Key = Key;
-		this.Latitude = Latitude;
-		this.Longitude = Longitude;
-		this.Name = Name;
+		this.key = key;
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.name = name;
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class AddGeoPosition extends CustomJavaAction<Boolean>
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector();        
-		redisconnector.geoadd(Key, Latitude.doubleValue(), Longitude.doubleValue(), Name);
+		redisconnector.geoadd(key, latitude.doubleValue(), longitude.doubleValue(), name);
 		return true;
 		// END USER CODE
 	}

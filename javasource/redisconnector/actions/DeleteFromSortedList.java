@@ -24,14 +24,14 @@ import redisconnector.impl.RedisConnector;
  */
 public class DeleteFromSortedList extends CustomJavaAction<Long>
 {
-	private String Key;
-	private String Member;
+	private String key;
+	private String member;
 
-	public DeleteFromSortedList(IContext context, String Key, String Member)
+	public DeleteFromSortedList(IContext context, String key, String member)
 	{
 		super(context);
-		this.Key = Key;
-		this.Member = Member;
+		this.key = key;
+		this.member = member;
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class DeleteFromSortedList extends CustomJavaAction<Long>
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		return redisconnector.zrem(Key, Member);
+		return redisconnector.zrem(key, member);
 		// END USER CODE
 	}
 

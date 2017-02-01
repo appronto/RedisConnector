@@ -25,16 +25,16 @@ import redisconnector.impl.RedisConnector;
  */
 public class DeleteValueFromList extends CustomJavaAction<Long>
 {
-	private String Key;
-	private Long Count;
-	private String Value;
+	private String key;
+	private Long count;
+	private String value;
 
-	public DeleteValueFromList(IContext context, String Key, Long Count, String Value)
+	public DeleteValueFromList(IContext context, String key, Long count, String value)
 	{
 		super(context);
-		this.Key = Key;
-		this.Count = Count;
-		this.Value = Value;
+		this.key = key;
+		this.count = count;
+		this.value = value;
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class DeleteValueFromList extends CustomJavaAction<Long>
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		return redisconnector.lrem(Key, Count, Value);
+		return redisconnector.lrem(key,count, value);
 		// END USER CODE
 	}
 

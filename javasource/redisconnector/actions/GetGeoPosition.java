@@ -25,14 +25,14 @@ import com.mendix.systemwideinterfaces.core.IMendixObject;
  */
 public class GetGeoPosition extends CustomJavaAction<IMendixObject>
 {
-	private String Key;
-	private String Name;
+	private String key;
+	private String name;
 
-	public GetGeoPosition(IContext context, String Key, String Name)
+	public GetGeoPosition(IContext context, String key, String name)
 	{
 		super(context);
-		this.Key = Key;
-		this.Name = Name;
+		this.key = key;
+		this.name = name;
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class GetGeoPosition extends CustomJavaAction<IMendixObject>
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		return redisconnector.geopos(this.getContext(), Key, Name);
+		return redisconnector.geopos(this.getContext(), key, name);
 		// END USER CODE
 	}
 

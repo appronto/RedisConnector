@@ -20,12 +20,12 @@ import redisconnector.impl.RedisConnector;
  */
 public class GetSortedListLenght extends CustomJavaAction<Long>
 {
-	private String Key;
+	private String key;
 
-	public GetSortedListLenght(IContext context, String Key)
+	public GetSortedListLenght(IContext context, String key)
 	{
 		super(context);
-		this.Key = Key;
+		this.key = key;
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class GetSortedListLenght extends CustomJavaAction<Long>
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		return redisconnector.zcard(Key);
+		return redisconnector.zcard(key);
 		// END USER CODE
 	}
 

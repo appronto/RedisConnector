@@ -18,12 +18,12 @@ import redisconnector.impl.RedisConnector;
  */
 public class GetListLenght extends CustomJavaAction<Long>
 {
-	private String Key;
+	private String key;
 
-	public GetListLenght(IContext context, String Key)
+	public GetListLenght(IContext context, String key)
 	{
 		super(context);
-		this.Key = Key;
+		this.key = key;
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class GetListLenght extends CustomJavaAction<Long>
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		return redisconnector.llen(Key);
+		return redisconnector.llen(key);
 		// END USER CODE
 	}
 

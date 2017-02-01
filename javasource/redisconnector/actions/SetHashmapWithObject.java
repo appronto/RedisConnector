@@ -33,14 +33,14 @@ import com.mendix.systemwideinterfaces.core.IMendixObject;
  */
 public class SetHashmapWithObject extends CustomJavaAction<String>
 {
-	private String Key;
-	private IMendixObject HashMapObject;
+	private String key;
+	private IMendixObject hashMapObject;
 
-	public SetHashmapWithObject(IContext context, String Key, IMendixObject HashMapObject)
+	public SetHashmapWithObject(IContext context, String key, IMendixObject hashMapObject)
 	{
 		super(context);
-		this.Key = Key;
-		this.HashMapObject = HashMapObject;
+		this.key = key;
+		this.hashMapObject = hashMapObject;
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class SetHashmapWithObject extends CustomJavaAction<String>
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		return redisconnector.hmset(getContext(), Key, HashMapObject);
+		return redisconnector.hmset(getContext(), key, hashMapObject);
 		// END USER CODE
 	}
 

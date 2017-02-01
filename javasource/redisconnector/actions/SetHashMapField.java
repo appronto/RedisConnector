@@ -33,16 +33,16 @@ import com.mendix.systemwideinterfaces.core.IMendixObject;
  */
 public class SetHashMapField extends CustomJavaAction<Long>
 {
-	private String Key;
-	private String Field;
-	private String Value;
+	private String key;
+	private String field;
+	private String value;
 
-	public SetHashMapField(IContext context, String Key, String Field, String Value)
+	public SetHashMapField(IContext context, String key, String field, String value)
 	{
 		super(context);
-		this.Key = Key;
-		this.Field = Field;
-		this.Value = Value;
+		this.key = key;
+		this.field = field;
+		this.value = value;
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class SetHashMapField extends CustomJavaAction<Long>
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		return redisconnector.hset(Key,Field,Value);
+		return redisconnector.hset(key,field,value);
 		// END USER CODE
 	}
 

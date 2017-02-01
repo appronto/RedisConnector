@@ -20,16 +20,16 @@ import redisconnector.impl.RedisConnector;
  */
 public class AddValueToSortedList extends CustomJavaAction<Long>
 {
-	private String Key;
-	private java.math.BigDecimal Score;
-	private String Member;
+	private String key;
+	private java.math.BigDecimal score;
+	private String member;
 
-	public AddValueToSortedList(IContext context, String Key, java.math.BigDecimal Score, String Member)
+	public AddValueToSortedList(IContext context, String key, java.math.BigDecimal score, String member)
 	{
 		super(context);
-		this.Key = Key;
-		this.Score = Score;
-		this.Member = Member;
+		this.key = key;
+		this.score = score;
+		this.member = member;
 	}
 
 	@Override
@@ -37,9 +37,9 @@ public class AddValueToSortedList extends CustomJavaAction<Long>
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-	    double ScoreConverted = Score.doubleValue();
+	    double ScoreConverted = score.doubleValue();
         
-		return redisconnector.zadd(Key, ScoreConverted, Member);
+		return redisconnector.zadd(key, ScoreConverted, member);
 		// END USER CODE
 	}
 

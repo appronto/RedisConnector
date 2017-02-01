@@ -35,14 +35,14 @@ import com.mendix.systemwideinterfaces.core.IMendixObject;
  */
 public class GetHashMap extends CustomJavaAction<IMendixObject>
 {
-	private String Key;
-	private IMendixObject ObjectToReturn;
+	private String key;
+	private IMendixObject objectToReturn;
 
-	public GetHashMap(IContext context, String Key, IMendixObject ObjectToReturn)
+	public GetHashMap(IContext context, String key, IMendixObject objectToReturn)
 	{
 		super(context);
-		this.Key = Key;
-		this.ObjectToReturn = ObjectToReturn;
+		this.key = key;
+		this.objectToReturn = objectToReturn;
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class GetHashMap extends CustomJavaAction<IMendixObject>
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		return redisconnector.hmget(getContext(), Key, ObjectToReturn);
+		return redisconnector.hmget(getContext(), key, objectToReturn);
 		// END USER CODE
 	}
 

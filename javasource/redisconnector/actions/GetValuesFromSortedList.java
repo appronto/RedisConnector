@@ -22,18 +22,18 @@ import com.mendix.systemwideinterfaces.core.IMendixObject;
  */
 public class GetValuesFromSortedList extends CustomJavaAction<java.util.List<IMendixObject>>
 {
-	private String Key;
-	private Long Start;
-	private Long Stop;
-	private redisconnector.proxies.Enum_Sort Sort;
+	private String key;
+	private Long start;
+	private Long stop;
+	private redisconnector.proxies.Enum_Sort sort;
 
-	public GetValuesFromSortedList(IContext context, String Key, Long Start, Long Stop, String Sort)
+	public GetValuesFromSortedList(IContext context, String key, Long start, Long stop, String sort)
 	{
 		super(context);
-		this.Key = Key;
-		this.Start = Start;
-		this.Stop = Stop;
-		this.Sort = Sort == null ? null : redisconnector.proxies.Enum_Sort.valueOf(Sort);
+		this.key = key;
+		this.start = start;
+		this.stop = stop;
+		this.sort = sort == null ? null : redisconnector.proxies.Enum_Sort.valueOf(sort);
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class GetValuesFromSortedList extends CustomJavaAction<java.util.List<IMe
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		return redisconnector.zrange(this.getContext(), Key, Start, Stop, Sort);
+		return redisconnector.zrange(this.getContext(), key, start, stop, sort);
 		// END USER CODE
 	}
 

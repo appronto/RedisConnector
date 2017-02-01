@@ -27,24 +27,24 @@ import com.mendix.systemwideinterfaces.core.IMendixObject;
  */
 public class AddMultipleGeoPositions extends CustomJavaAction<Boolean>
 {
-	private String Key;
-	private java.util.List<IMendixObject> __GeoPositions;
-	private java.util.List<redisconnector.proxies.GeoPosition> GeoPositions;
+	private String key;
+	private java.util.List<IMendixObject> __geoPositions;
+	private java.util.List<redisconnector.proxies.GeoPosition> geoPositions;
 
-	public AddMultipleGeoPositions(IContext context, String Key, java.util.List<IMendixObject> GeoPositions)
+	public AddMultipleGeoPositions(IContext context, String key, java.util.List<IMendixObject> geoPositions)
 	{
 		super(context);
-		this.Key = Key;
-		this.__GeoPositions = GeoPositions;
+		this.key = key;
+		this.__geoPositions = geoPositions;
 	}
 
 	@Override
 	public Boolean executeAction() throws Exception
 	{
-		this.GeoPositions = new java.util.ArrayList<redisconnector.proxies.GeoPosition>();
-		if (__GeoPositions != null)
-			for (IMendixObject __GeoPositionsElement : __GeoPositions)
-				this.GeoPositions.add(redisconnector.proxies.GeoPosition.initialize(getContext(), __GeoPositionsElement));
+		this.geoPositions = new java.util.ArrayList<redisconnector.proxies.GeoPosition>();
+		if (__geoPositions != null)
+			for (IMendixObject __geoPositionsElement : __geoPositions)
+				this.geoPositions.add(redisconnector.proxies.GeoPosition.initialize(getContext(), __geoPositionsElement));
 
 		// BEGIN USER CODE
 		throw new com.mendix.systemwideinterfaces.MendixRuntimeException("Java action was not implemented");

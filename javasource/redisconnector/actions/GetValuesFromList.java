@@ -52,16 +52,16 @@ import com.mendix.systemwideinterfaces.core.IMendixObject;
  */
 public class GetValuesFromList extends CustomJavaAction<java.util.List<IMendixObject>>
 {
-	private String Key;
-	private Long Start;
-	private Long Stop;
+	private String key;
+	private Long start;
+	private Long stop;
 
-	public GetValuesFromList(IContext context, String Key, Long Start, Long Stop)
+	public GetValuesFromList(IContext context, String key, Long start, Long stop)
 	{
 		super(context);
-		this.Key = Key;
-		this.Start = Start;
-		this.Stop = Stop;
+		this.key = key;
+		this.start = start;
+		this.stop = stop;
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class GetValuesFromList extends CustomJavaAction<java.util.List<IMendixOb
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		return redisconnector.lrange(this.getContext(), Key, Start, Stop);
+		return redisconnector.lrange(this.getContext(), key, start, stop);
 		// END USER CODE
 	}
 

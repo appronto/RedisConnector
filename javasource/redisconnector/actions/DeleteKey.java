@@ -32,12 +32,12 @@ import redisconnector.impl.RedisConnector;
  */
 public class DeleteKey extends CustomJavaAction<Long>
 {
-	private String Key;
+	private String key;
 
-	public DeleteKey(IContext context, String Key)
+	public DeleteKey(IContext context, String key)
 	{
 		super(context);
-		this.Key = Key;
+		this.key = key;
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class DeleteKey extends CustomJavaAction<Long>
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		return redisconnector.del(Key);
+		return redisconnector.del(key);
 		// END USER CODE
 	}
 

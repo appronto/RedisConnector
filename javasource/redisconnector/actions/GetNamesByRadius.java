@@ -27,22 +27,22 @@ import com.mendix.systemwideinterfaces.core.IMendixObject;
  */
 public class GetNamesByRadius extends CustomJavaAction<java.util.List<IMendixObject>>
 {
-	private String Key;
-	private java.math.BigDecimal Longitude;
-	private java.math.BigDecimal Latitude;
-	private java.math.BigDecimal Radius;
-	private redisconnector.proxies.Enum_GeoUnit Unit;
-	private Long Max;
+	private String key;
+	private java.math.BigDecimal longitude;
+	private java.math.BigDecimal latitude;
+	private java.math.BigDecimal radius;
+	private redisconnector.proxies.Enum_GeoUnit unit;
+	private Long max;
 
-	public GetNamesByRadius(IContext context, String Key, java.math.BigDecimal Longitude, java.math.BigDecimal Latitude, java.math.BigDecimal Radius, String Unit, Long Max)
+	public GetNamesByRadius(IContext context, String key, java.math.BigDecimal longitude, java.math.BigDecimal latitude, java.math.BigDecimal radius, String unit, Long max)
 	{
 		super(context);
-		this.Key = Key;
-		this.Longitude = Longitude;
-		this.Latitude = Latitude;
-		this.Radius = Radius;
-		this.Unit = Unit == null ? null : redisconnector.proxies.Enum_GeoUnit.valueOf(Unit);
-		this.Max = Max;
+		this.key = key;
+		this.longitude = longitude;
+		this.latitude = latitude;
+		this.radius = radius;
+		this.unit = unit == null ? null : redisconnector.proxies.Enum_GeoUnit.valueOf(unit);
+		this.max = max;
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class GetNamesByRadius extends CustomJavaAction<java.util.List<IMendixObj
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		return redisconnector.georadius(this.getContext(), Key, Latitude.doubleValue(), Longitude.doubleValue(), Radius.doubleValue(), Unit, Max.intValue());
+		return redisconnector.georadius(this.getContext(), key, latitude.doubleValue(), longitude.doubleValue(), radius.doubleValue(), unit, max.intValue());
 		// END USER CODE
 	}
 

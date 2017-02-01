@@ -18,16 +18,16 @@ import redisconnector.impl.RedisConnector;
  */
 public class GetRankInSortedList extends CustomJavaAction<Long>
 {
-	private String Key;
-	private String Member;
-	private redisconnector.proxies.Enum_Sort Sort;
+	private String key;
+	private String member;
+	private redisconnector.proxies.Enum_Sort sort;
 
-	public GetRankInSortedList(IContext context, String Key, String Member, String Sort)
+	public GetRankInSortedList(IContext context, String key, String member, String sort)
 	{
 		super(context);
-		this.Key = Key;
-		this.Member = Member;
-		this.Sort = Sort == null ? null : redisconnector.proxies.Enum_Sort.valueOf(Sort);
+		this.key = key;
+		this.member = member;
+		this.sort = sort == null ? null : redisconnector.proxies.Enum_Sort.valueOf(sort);
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class GetRankInSortedList extends CustomJavaAction<Long>
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		return redisconnector.zrank(Key,Member, Sort);
+		return redisconnector.zrank(key,member, sort);
 		// END USER CODE
 	}
 

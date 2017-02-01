@@ -19,14 +19,14 @@ import redisconnector.impl.RedisConnector;
  */
 public class GetGeoHash extends CustomJavaAction<String>
 {
-	private String Key;
-	private String Member;
+	private String key;
+	private String member;
 
-	public GetGeoHash(IContext context, String Key, String Member)
+	public GetGeoHash(IContext context, String key, String member)
 	{
 		super(context);
-		this.Key = Key;
-		this.Member = Member;
+		this.key = key;
+		this.member = member;
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class GetGeoHash extends CustomJavaAction<String>
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		return redisconnector.geohash(Key, Member);
+		return redisconnector.geohash(key, member);
 		// END USER CODE
 	}
 

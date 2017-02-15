@@ -68,7 +68,7 @@ See https://github.com/appronto/RedisConnector/releases
 - [ ] **BITPOS** *key bit [start] [end]* Find first bit set or clear in a string
 - [ ] **BLPOP** *key [key ...] timeout* Remove and get the first element in a list, or block until one is available
 - [ ] **BRPOP** *key [key ...] timeout* Remove and get the last element in a list, or block until one is available
-- [ ] **BRPOPLPUSH** *source destination timeout* Pop a value from a list, push it to another list and return it; or block until one is available
+- [X] **BRPOPLPUSH** *source destination timeout* Pop a value from a list, push it to another list and return it; or block until one is available
 - [ ] **CLIENT KILL** *[ip:port] [ID client-id] [TYPE normal|master|slave|pubsub] [ADDR ip:port] [SKIPME yes/no]* Kill the connection of a client
 - [ ] **CLIENT LIST** Get the list of client connections
 - [ ] **CLIENT GETNAME** Get the current connection name
@@ -188,7 +188,7 @@ See https://github.com/appronto/RedisConnector/releases
 - [ ] **RESTORE** *key ttl serialized-value [REPLACE]* Create a key using the provided serialized value, previously obtained using DUMP.
 - [ ] **ROLE** Return the role of the instance in the context of replication
 - [ ] **RPOP** *key* Remove and get the last element in a list
-- [ ] **RPOPLPUSH** *source destination* Remove the last element in a list, prepend it to another list and return it
+- [X] **RPOPLPUSH** *source destination* Remove the last element in a list, prepend it to another list and return it
 - [X] **RPUSH** *key value [value ...]* Append one or multiple values to a list
 - [ ] **RPUSHX** *key value* Append a value to a list, only if the list exists
 - [ ] **SADD** *key member [member ...]* Add one or more members to a set

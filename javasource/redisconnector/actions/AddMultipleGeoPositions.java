@@ -9,8 +9,15 @@
 
 package redisconnector.actions;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.mendix.systemwideinterfaces.core.IContext;
 import com.mendix.webui.CustomJavaAction;
+
+import redis.clients.jedis.GeoCoordinate;
+import redisconnector.impl.RedisConnector;
+
 import com.mendix.systemwideinterfaces.core.IMendixObject;
 
 /**
@@ -47,7 +54,16 @@ public class AddMultipleGeoPositions extends CustomJavaAction<Boolean>
 				this.geoPositions.add(redisconnector.proxies.GeoPosition.initialize(getContext(), __geoPositionsElement));
 
 		// BEGIN USER CODE
-		throw new com.mendix.systemwideinterfaces.MendixRuntimeException("Java action was not implemented");
+		
+		Map<String, GeoCoordinate> coordinateMap = new HashMap<String, GeoCoordinate>();
+		for (redisconnector.proxies.GeoPosition geoPosition : geoPositions)
+	    {
+	    	coordinateMap.put(geoPosition.getName(), new GeoCoordinate(geoPosition.getLongitude().doubleValue(), geoPosition.getLatitude().doubleValue()));
+	    }
+	    		
+		RedisConnector redisconnector = new RedisConnector();        
+		redisconnector.geoadd(key, coordinateMap);
+		return true;
 		// END USER CODE
 	}
 

@@ -11,13 +11,10 @@ package redisconnector.actions;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import com.mendix.systemwideinterfaces.core.IContext;
 import com.mendix.webui.CustomJavaAction;
-
 import redis.clients.jedis.GeoCoordinate;
 import redisconnector.impl.RedisConnector;
-
 import com.mendix.systemwideinterfaces.core.IMendixObject;
 
 /**

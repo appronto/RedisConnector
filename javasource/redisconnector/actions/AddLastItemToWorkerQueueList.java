@@ -11,7 +11,6 @@ package redisconnector.actions;
 
 import com.mendix.systemwideinterfaces.core.IContext;
 import com.mendix.webui.CustomJavaAction;
-
 import redisconnector.impl.RedisConnector;
 
 /**
@@ -21,6 +20,9 @@ import redisconnector.impl.RedisConnector;
  * 
  * If timeout provided
  * BRPOPLPUSH is the blocking variant of RPOPLPUSH. When source contains elements, this command behaves exactly like RPOPLPUSH. When used inside a MULTI/EXEC block, this command behaves exactly like RPOPLPUSH. When source is empty, Redis will block the connection until another client pushes to it or until timeout is reached. A timeout of zero can be used to block indefinitely.
+ * 
+ * Return value
+ * Bulk string reply: the element being popped and pushed.
  */
 public class AddLastItemToWorkerQueueList extends CustomJavaAction<String>
 {

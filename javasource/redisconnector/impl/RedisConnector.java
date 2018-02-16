@@ -34,8 +34,6 @@ import redis.clients.jedis.GeoRadiusResponse;
 import redis.clients.jedis.GeoUnit;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
-import redis.clients.jedis.Protocol;
 import redis.clients.jedis.Tuple;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 import redis.clients.jedis.params.geo.GeoRadiusParam;
@@ -48,20 +46,14 @@ public class RedisConnector {
 	private Jedis redis = null;
 	private ILogNode _logNode = Core.getLogger("Redis");
 
-	private static JedisPool pool = (redisconnector.proxies.constants.Constants.getRedisAuth().trim().length() > 0
-			? new JedisPool(new JedisPoolConfig(), redisconnector.proxies.constants.Constants.getRedisEndpoint().trim(),
-					Integer.valueOf(redisconnector.proxies.constants.Constants.getRedisPort().trim()),
-					Protocol.DEFAULT_TIMEOUT, redisconnector.proxies.constants.Constants.getRedisAuth().trim())
-			: new JedisPool(new JedisPoolConfig(), redisconnector.proxies.constants.Constants.getRedisEndpoint().trim(),
-					Integer.valueOf(redisconnector.proxies.constants.Constants.getRedisPort().trim()),
-					Protocol.DEFAULT_TIMEOUT));
-
+	private static JedisPool pool = null;
 	private Jedis subscriberRedis = null;
 	private static MendixRedisPubSub pubSub = new MendixRedisPubSub();
 
 	public RedisConnector() {
 		try {
 			Long.valueOf(redisconnector.proxies.constants.Constants.getRedisDatabaseIndex().trim());
+			pool = RedisPoolFactory.getJedisPool();
 		} catch (NumberFormatException e) {
 			_logNode.error("Please configure constant RedisDatabaseIndex with value 0 or higher, current value: "
 					+ redisconnector.proxies.constants.Constants.getRedisDatabaseIndex().trim(), e);

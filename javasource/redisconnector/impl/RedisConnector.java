@@ -659,6 +659,25 @@ public class RedisConnector {
 			}
 		}
 	}
+	
+	// https://redis.io/commands/rpop
+	public String rpop(String key) {
+		try {
+			_logNode.debug("rpop " + key);
+			redis = pool.getResource();
+			setDatabase();
+			return redis.rpop(key);
+		} catch (JedisConnectionException e) {
+			if (redis != null) {
+				redis.close();
+			}
+			throw e;
+		} finally {
+			if (redis != null) {
+				redis.close();
+			}
+		}
+	}
 
 	// see http://redis.io/commands/hset
 	public long hset(String Key, String Field, String Value) {

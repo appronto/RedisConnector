@@ -11,7 +11,6 @@ package redisconnector.actions;
 
 import com.mendix.systemwideinterfaces.core.IContext;
 import com.mendix.webui.CustomJavaAction;
-
 import redisconnector.impl.RedisConnector;
 
 /**

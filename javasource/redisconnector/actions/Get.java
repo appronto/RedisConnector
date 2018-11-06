@@ -11,31 +11,33 @@ package redisconnector.actions;
 
 import com.mendix.systemwideinterfaces.core.IContext;
 import com.mendix.webui.CustomJavaAction;
+
 import redisconnector.impl.RedisConnector;
 
 /**
- * Returns the rank of member in the sorted set stored at key, with the scores ordered from low to high. The rank (or index) is 0-based, which means that the member with the lowest score has rank 0.
+ * Get the value of key. If the key does not exist the special value nil is returned. An error is returned if the value stored at key is not a string, because GET only handles string values.
+ * 
+ * Return value
+ * Bulk string reply: the value of key, or nil when key does not exist.
+ * 
+ * 
  */
-public class GetRankInSortedList extends CustomJavaAction<Long>
+public class Get extends CustomJavaAction<String>
 {
 	private String key;
-	private String member;
-	private redisconnector.proxies.Enum_Sort sort;
 
-	public GetRankInSortedList(IContext context, String key, String member, String sort)
+	public Get(IContext context, String key)
 	{
 		super(context);
 		this.key = key;
-		this.member = member;
-		this.sort = sort == null ? null : redisconnector.proxies.Enum_Sort.valueOf(sort);
 	}
 
 	@Override
-	public Long executeAction() throws Exception
+	public String executeAction() throws Exception
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		return redisconnector.zrank(key,member, sort);
+		return redisconnector.get(key);
 		// END USER CODE
 	}
 
@@ -45,7 +47,7 @@ public class GetRankInSortedList extends CustomJavaAction<Long>
 	@Override
 	public String toString()
 	{
-		return "GetRankInSortedList";
+		return "Get";
 	}
 
 	// BEGIN EXTRA CODE

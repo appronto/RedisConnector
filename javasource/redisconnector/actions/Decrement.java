@@ -11,23 +11,25 @@ package redisconnector.actions;
 
 import com.mendix.systemwideinterfaces.core.IContext;
 import com.mendix.webui.CustomJavaAction;
+
 import redisconnector.impl.RedisConnector;
 
 /**
- * Returns the rank of member in the sorted set stored at key, with the scores ordered from low to high. The rank (or index) is 0-based, which means that the member with the lowest score has rank 0.
+ * Decrements the number stored at key by one. If the key does not exist, it is set to 0 before performing the operation. An error is returned if the key contains a value of the wrong type or contains a string that can not be represented as integer. This operation is limited to 64 bit signed integers.
+ * 
+ * See INCR for extra information on increment/decrement operations.
+ * 
+ * Return value
+ * Integer reply: the value of key after the decrement
  */
-public class GetRankInSortedList extends CustomJavaAction<Long>
+public class Decrement extends CustomJavaAction<Long>
 {
 	private String key;
-	private String member;
-	private redisconnector.proxies.Enum_Sort sort;
 
-	public GetRankInSortedList(IContext context, String key, String member, String sort)
+	public Decrement(IContext context, String key)
 	{
 		super(context);
 		this.key = key;
-		this.member = member;
-		this.sort = sort == null ? null : redisconnector.proxies.Enum_Sort.valueOf(sort);
 	}
 
 	@Override
@@ -35,7 +37,7 @@ public class GetRankInSortedList extends CustomJavaAction<Long>
 	{
 		// BEGIN USER CODE
 		RedisConnector redisconnector = new RedisConnector(); 
-		return redisconnector.zrank(key,member, sort);
+		return redisconnector.decr(key);
 		// END USER CODE
 	}
 
@@ -45,7 +47,7 @@ public class GetRankInSortedList extends CustomJavaAction<Long>
 	@Override
 	public String toString()
 	{
-		return "GetRankInSortedList";
+		return "Decrement";
 	}
 
 	// BEGIN EXTRA CODE

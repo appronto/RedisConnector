@@ -772,6 +772,25 @@ public class RedisConnector {
 			}
 		}
 	}
+	
+	// https://redis.io/commands/set
+	public String set(String key, String value) {
+		try {
+			_logNode.debug("SET " + key + " with VALUE " + value);
+			redis = pool.getResource();
+			setDatabase();
+			return redis.set(key, value);
+		} catch (JedisConnectionException e) {
+			if (redis != null) {
+				redis.close();
+			}
+			throw e;
+		} finally {
+			if (redis != null) {
+				redis.close();
+			}
+		}
+	}
 
 	// see http://redis.io/commands/hmget
 	public IMendixObject hmget(IContext context, String Key, IMendixObject ObjectToReturn) throws Exception {

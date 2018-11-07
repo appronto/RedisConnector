@@ -104,7 +104,7 @@ See https://github.com/appronto/RedisConnector/releases
 - [ ] **DBSIZE** Return the number of keys in the selected database
 - [ ] **DEBUG OBJECT** *key* Get debugging information about a key
 - [ ] **DEBUG SEGFAULT** Make the server crash
-- [ ] **DECR** *key* Decrement the integer value of a key by one
+- [X] **DECR** *key* Decrement the integer value of a key by one
 - [ ] **DECRBY** *key decrement* Decrement the integer value of a key by the given number
 - [X] **DEL** *key [key ...]* Delete a key
 - [ ] **DISCARD** Discard all commands issued after MULTI
@@ -124,7 +124,7 @@ See https://github.com/appronto/RedisConnector/releases
 - [ ] **GEODIST** *key member1 member2 [unit]* Returns the distance between two members of a geospatial index
 - [X] **GEORADIUS** *key longitude latitude radius m|km|ft|mi [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count] [ASC|DESC] [STORE key] [STOREDIST key]* Query a sorted set representing a geospatial index to fetch members matching a given maximum distance from a point
 - [ ] **GEORADIUSBYMEMBER** *key member radius m|km|ft|mi [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count] [ASC|DESC] [STORE key] [STOREDIST key]* Query a sorted set representing a geospatial index to fetch members matching a given maximum distance from a member
-- [ ] **GET** *key* Get the value of a key
+- [X] **GET** *key* Get the value of a key
 - [ ] **GETBIT** *key offset* Returns the bit value at offset in the string value stored at key
 - [ ] **GETRANGE** *key start end* Get a substring of the string stored at a key
 - [ ] **GETSET** *key value* Set the string value of a key and return its old value
@@ -202,7 +202,7 @@ See https://github.com/appronto/RedisConnector/releases
 - [ ] **SDIFF** * key [key ...]* Subtract multiple sets
 - [ ] **SDIFFSTORE destination** * key [key ...]* Subtract multiple sets and store the resulting set in a key
 - [ ] **SELECT** *index* Change the selected database for the current connection
-- [ ] **SET** *key value [EX seconds] [PX milliseconds] [NX|XX]* Set the string value of a key
+- [X] **SET** *key value [EX seconds] [PX milliseconds] [NX|XX]* Set the string value of a key
 - [ ] **SETBIT** *key offset value* Sets or clears the bit at offset in the string value stored at key
 - [ ] **SETEX** *key seconds value* Set the value and expiration of a key
 - [ ] **SETNX** *key value* Set the value of a key, only if the key does not exist

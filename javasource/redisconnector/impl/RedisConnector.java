@@ -755,7 +755,7 @@ public class RedisConnector {
 	}
 
 	// see http://redis.io/commands/del
-	public long del(String Key) {
+	public Long del(String Key) {
 		try {
 			_logNode.debug("DEL " + Key);
 			redis = pool.getResource();
@@ -772,6 +772,64 @@ public class RedisConnector {
 			}
 		}
 	}
+	
+	// https://redis.io/commands/set
+	public String set(String key, String value) {
+		try {
+			_logNode.debug("SET " + key + " with VALUE " + value);
+			redis = pool.getResource();
+			setDatabase();
+			return redis.set(key, value);
+		} catch (JedisConnectionException e) {
+			if (redis != null) {
+				redis.close();
+			}
+			throw e;
+		} finally {
+			if (redis != null) {
+				redis.close();
+			}
+		}
+	}
+	
+	
+	// see https://redis.io/commands/decr	
+	public Long decr(String key) {
+		try {
+			_logNode.debug("DECR " + key + " by 1");
+			redis = pool.getResource();
+			setDatabase();
+			return redis.decr(key);
+		} catch (JedisConnectionException e) {
+			if (redis != null) {
+				redis.close();
+			}
+			throw e;
+		} finally {
+			if (redis != null) {
+				redis.close();
+			}
+		}
+	}	
+	
+	// see https://redis.io/commands/get
+	public String get(String key) {
+		try {
+			_logNode.debug("Get value for key " + key);
+			redis = pool.getResource();
+			setDatabase();
+			return redis.get(key);
+		} catch (JedisConnectionException e) {
+			if (redis != null) {
+				redis.close();
+			}
+			throw e;
+		} finally {
+			if (redis != null) {
+				redis.close();
+			}
+		}
+	}	
 
 	// see http://redis.io/commands/hmget
 	public IMendixObject hmget(IContext context, String Key, IMendixObject ObjectToReturn) throws Exception {

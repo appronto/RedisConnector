@@ -13,6 +13,13 @@ import com.mendix.systemwideinterfaces.core.IContext;
 import com.mendix.webui.CustomJavaAction;
 import redisconnector.impl.RedisConnector;
 
+/**
+ * RPOP key
+ * Removes and returns the last element of the list stored at key.
+ * 
+ * Return value
+ * Bulk string reply: the value of the last element, or nil when key does not exist.
+ */
 public class GetLastValueFromListAndRemove extends CustomJavaAction<String>
 {
 	private String key;

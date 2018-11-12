@@ -187,7 +187,7 @@ See https://github.com/appronto/RedisConnector/releases
 - [ ] **RENAMENX** *key newkey* Rename a key, only if the new key does not exist
 - [ ] **RESTORE** *key ttl serialized-value [REPLACE]* Create a key using the provided serialized value, previously obtained using DUMP.
 - [ ] **ROLE** Return the role of the instance in the context of replication
-- [ ] **RPOP** *key* Remove and get the last element in a list
+- [X] **RPOP** *key* Remove and get the last element in a list
 - [X] **RPOPLPUSH** *source destination* Remove the last element in a list, prepend it to another list and return it
 - [X] **RPUSH** *key value [value ...]* Append one or multiple values to a list
 - [ ] **RPUSHX** *key value* Append a value to a list, only if the list exists
